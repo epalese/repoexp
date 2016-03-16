@@ -24,9 +24,11 @@ export default React.createClass({
         };
     },
     componentWillMount: function () {
+        // the component has this.proprs.notebook if
+        // initialised in components.notebooks.list
         if (this.state.notebook) {
         } else {
-            // get notebook from query params
+            // otherwise get notebook from query params
             this.getNotebook();
         }
     },
