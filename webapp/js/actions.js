@@ -20,5 +20,12 @@ export default Reflux.createActions({
 		asyncResult: true
 	},
 	'search': {},
-	'getSessionContext': {} 
+	'getSessionContext': {} ,
+
+	'getNotebook': {
+		asyncResult: true
+	},
+	'modifyNotebook': {
+		asyncResult: true
+	}
 });

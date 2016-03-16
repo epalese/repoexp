@@ -21,5 +21,63 @@
       "profileImageData": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPCEtLSBDcmVhdGVkIHdpdGggTWV0aG9kIERyYXcgLSBodHRwOi8vZ2l0aHViLmNvbS9kdW9waXhlbC9NZXRob2QtRHJhdy8gLS0+CiA8Zz4KICA8dGl0bGU+YmFja2dyb3VuZDwvdGl0bGU+CiAgPHJlY3QgZmlsbD0iIzAwZmZmZiIgaWQ9ImNhbnZhc19iYWNrZ3JvdW5kIiBoZWlnaHQ9IjgyIiB3aWR0aD0iODIiIHk9Ii0xIiB4PSItMSIvPgogIDxnIGRpc3BsYXk9Im5vbmUiIG92ZXJmbG93PSJ2aXNpYmxlIiB5PSIwIiB4PSIwIiBoZWlnaHQ9IjEwMCUiIHdpZHRoPSIxMDAlIiBpZD0iY2FudmFzR3JpZCI+CiAgIDxyZWN0IGZpbGw9InVybCgjZ3JpZHBhdHRlcm4pIiBzdHJva2Utd2lkdGg9IjAiIHk9IjAiIHg9IjAiIGhlaWdodD0iMTAwJSIgd2lkdGg9IjEwMCUiLz4KICA8L2c+CiA8L2c+CiA8Zz4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPGVsbGlwc2Ugcnk9IjE1IiByeD0iMTUiIGlkPSJzdmdfMSIgY3k9IjMyLjUiIGN4PSI0MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2U9IiMwMDAiIGZpbGw9IiNmZmYiLz4KICA8ZWxsaXBzZSBzdHJva2U9IiMwMDAiIHJ5PSI2MS41IiByeD0iMzguNDk5OTk4IiBpZD0ic3ZnXzIiIGN5PSIxMTIiIGN4PSIzOS41IiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9IiNmZmYiLz4KIDwvZz4KPC9zdmc+",
       "id": 1
     }
+  ],
+  "notebooks": [
+    {
+      "name": "test notebook",
+      "user": 1,
+      "date": 1457995680565,
+      "paragraphs": [
+        {
+          "output": "Loaded test_csv into test_csv: 3574 rows",
+          "code": "this.F.downloadCSV(\"https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv\", \"test_csv\");\nthis.F.loadCSV(\"test_csv\");",
+          "type": "code",
+          "id": "1",
+          "order": 1
+        },
+        {
+          "output": "Received JSON",
+          "code": "this.F.sql(\"csv\", \"SELECT Department, Date_of_Payment, Amount FROM test_csv LIMIT 10\");",
+          "type": "code",
+          "id": "2",
+          "order": 2
+        },
+        {
+          "output": "Department:string\nEntity:string\nDate_of_Payment:string\nExpense_Type:string\nExpense_Area:string\nSupplier:string\nTransaction_Number:string\nAmount:string\nDescription:string\nSupplier_Post_Code:string\nSupplier_Type:string\nContract_Number:string\nProject_Code:string\nExpenditure_Type:string",
+          "code": "this.F.describe(\"test_csv\");",
+          "type": "code",
+          "id": "3",
+          "order": 3
+        },
+        {
+          "output": "",
+          "code": "var tbl = React.createClass({\n    getInitialState: function() {\n        return {\n            data: csv\n        }\n    },\n    render: function() {\n        return React.createElement(Griddle, {results: this.state.data})\n    }\n});\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(tbl)\n)",
+          "type": "react",
+          "id": "4",
+          "order": 4
+        },
+        {
+          "output": "This is **another** comment",
+          "code": "This is **another** comment.  \nCiao",
+          "type": "markdown",
+          "id": "5",
+          "order": 5
+        },
+        {
+          "output": "userid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
+          "code": "userid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
+          "type": "react",
+          "id": "6",
+          "order": 6
+        },
+        {
+          "output": "Tables: test_csv",
+          "code": "this.F.listTables()",
+          "type": "code",
+          "id": "7",
+          "order": "7"
+        }
+      ]
+    }
   ]
 }
