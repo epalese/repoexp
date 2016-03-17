@@ -6,6 +6,7 @@ import NotebookList   from 'appRoot/components/notebooks/list';
  
 export default React.createClass({
    render: function () {
+        console.log("views notebooks render");
         return (
             <div className="notebook-list-view">
                 <NotebookList />

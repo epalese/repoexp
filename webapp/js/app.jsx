@@ -1,19 +1,24 @@
-import React     from 'react';
-import ReactDom  from 'react-dom';
+import React          from 'react';
+import ReactDom       from 'react-dom';
 import { Router, Route, IndexRoute } from 'react-router';
-import CSS       from '../css/app.less';
-import AppHeader from 'appRoot/views/appHeader';
-import Login     from 'appRoot/views/login';
-import PostList  from 'appRoot/views/posts/list';
-import PostView  from 'appRoot/views/posts/view';
-import PostEdit  from 'appRoot/views/posts/edit';
-import UserList  from 'appRoot/views/users/list';
-import UserView  from 'appRoot/views/users/view';
-import UserEdit  from 'appRoot/views/users/edit';
+import CSS            from '../css/app.less';
+import AppHeader      from 'appRoot/views/appHeader';
+import Login          from 'appRoot/views/login';
+import PostList       from 'appRoot/views/posts/list';
+import PostView       from 'appRoot/views/posts/view';
+import PostEdit       from 'appRoot/views/posts/edit';
+import NotebookList   from 'appRoot/views/notebooks/list';
+import NotebookView   from 'appRoot/views/notebooks/view';
+import NotebookEdit   from 'appRoot/views/notebooks/edit';
+import UserList       from 'appRoot/views/users/list';
+import UserView       from 'appRoot/views/users/view';
+import UserEdit       from 'appRoot/views/users/edit';
+
 
 // Components must be uppercase - regular DOM is lowercase
 let AppLayout = React.createClass({
 render: function () {
+    console.log("app.jsx");
     return (
       <div className="app-container">
         <AppHeader />
@@ -45,6 +50,25 @@ let routes = (
       path="posts/:postId"
       component={ PostView } 
     />
+
+    <Route
+      path="notebooks/:pageNum/?" 
+      component={ NotebookList } 
+      ignoreScrollBehavior 
+    />
+    <Route
+      path="/notebooks/create"
+      component={ NotebookEdit }
+    />
+    <Route
+      path="/notebooks/:notebookId/edit"
+      component={ NotebookEdit } 
+    />
+    <Route
+      path="notebooks/:postId"
+      component={ NotebookView } 
+    />
+
     <Route 
       path="/users" 
       component={ UserList } 

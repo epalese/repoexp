@@ -10,6 +10,7 @@ export default React.createClass({
         Reflux.connect(PostStore, 'posts')
     ],
     render: function () {
+        console.log("components.posts.list: " + this.state.posts);
         var posts = this.props.user ? this.state.posts.filter(function (post) {
             return post.user == this.props.user;
         }.bind(this)) : this.state.posts;

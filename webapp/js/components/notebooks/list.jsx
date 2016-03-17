@@ -10,10 +10,10 @@ export default React.createClass({
         Reflux.connect(NotebookStore, 'notebooks')
     ],
     render: function () {
+        console.log("components notebooks render");
         var notebooks = this.props.user ? this.state.notebooks.filter(function (notebook) {
             return notebook.user == this.props.user;
         }.bind(this)) : this.state.notebook;
-
         var notebooksUI = notebooks.map(function (notebook) {
             return <NotebookView key={notebook.id} notebook={notebook} mode="summary"/>;
         });

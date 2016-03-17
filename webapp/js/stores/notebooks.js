@@ -9,14 +9,17 @@ export default Reflux.createStore({
     notebooks: [],
     // called when mixin is used to init the component state
     getInitialState: function() {
+        console.log('stores.notebooks.getInitialState: ' + this.notebooks);
         return this.notebooks;
     },
     init: function () {
+        console.log('stores.notebooks: init');
         Request
             .get(this.endpoint)
             .end(function (err, res) {
                 if (res.ok) {
                     this.notebooks = res.body;
+                    console.log('stores.notebooks.init: ' + res.body[0].name);
                     this.trigger(this.notebooks);
                 } else {
                 }

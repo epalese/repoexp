@@ -9,14 +9,17 @@ export default Reflux.createStore({
     posts: [],
     // called when mixin is used to init the component state
     getInitialState: function() {
+        console.log('stores.posts.getInitialState: ' + this.posts);
         return this.posts;
     },
     init: function () {
+        console.log('stores.posts: init');
         Request
             .get(this.endpoint)
             .end(function (err, res) {
                 if (res.ok) {
                     this.posts = res.body;
+                    console.log('stores.posts.init: ' + res.body[0]);
                     this.trigger(this.posts);
                 } else {
                 }

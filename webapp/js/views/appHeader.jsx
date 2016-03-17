@@ -14,6 +14,7 @@ export default React.createClass({
     this.history.pushState('', '/');
   },
   render: function () {
+    console.log("views.appHeader")
     return (
       <header className="app-header">
         <Link to="/"><h1>The Report Experience</h1></Link>
