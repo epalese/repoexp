@@ -8,8 +8,8 @@ import Actions      from 'appRoot/actions';
 import Loader       from 'appRoot/components/loader';
 import marked       from 'marked';
 
-window.Tools = {};
-window.Tools.React = React;
+// window.Tools = {};
+// window.Tools.React = React;
 
 var ContentEditable = React.createClass({
     render: function(){

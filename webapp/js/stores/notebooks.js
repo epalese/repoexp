@@ -28,9 +28,9 @@ export default Reflux.createStore({
             var req = Request.get(this.endpoint).query({id: id});
             req.end(function(err, res) {
                 if (res.ok) {
-                    // console.log("onGetNotebook: res.ok = " + res.ok);
                     if (res.body.length > 0) {
                         Actions.getNotebook.completed(res.body[0]);
+                        console.log("onGetNotebook: res.ok = " + res.body[0]);
                     } else {
                         Actions.getNotebook.failed('Notebook (' + id + ') not found');    
                     }
@@ -41,6 +41,7 @@ export default Reflux.createStore({
         }
         req.bind(this)();
         // Config.loadTimeSimMs ? setTimeout(req.bind(this), Config.loadTimeSimMs) : req();
+
     },
     onModifyNotebook: function (notebook, id) {
         console.log("onModifyNotebook: notebook = " + notebook);

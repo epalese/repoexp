@@ -3,7 +3,6 @@
 import React        from 'react';
 import update       from 'react-addons-update';
 import Reflux       from 'reflux';
-// import Quill        from 'quill';
 import Moment       from 'moment';
 import Config       from 'appRoot/appConfig';
 import Actions      from 'appRoot/actions';
@@ -13,6 +12,8 @@ import ParagraphEdit from 'appRoot/views/paragraphs/edit';
 
 
 export default React.createClass({
+    mixins: [Reflux.ListenerMixin],
+
     getInitialState: function () {
         return { loading: true, validity: {}, notebook: {} };
     },
@@ -25,17 +26,22 @@ export default React.createClass({
         console.log("componentWillMount: editMode = " + this.editMode);
         if (this.editMode) {
             console.log("componentWillMount: id = " + this.notebookId);
-            Actions.getNotebook(this.notebookId)
-                .then(function (notebook) {
-                    // setTimeout(function () {
-                    //     this.setState({ notebook: notebook, loading: false });
-                    // }.bind(this), 2000);
-                    console.log("actions.getNotebook returned");
-                    this.setState({ notebook: notebook, loading: false });
-                }.bind(this))
-                ['catch'](function (err) {
-                    this.setState({ error: err, loading: false });
-                }.bind(this));
+            var a = Actions.getNotebook(this.notebookId);
+            this.listenTo(Actions.getNotebook.completed, function(notebook) {
+                console.log("actions.getNotebook returned");
+                this.setState({ notebook: notebook, loading: false });
+            });
+            // Actions.getNotebook(this.notebookId).then(function (notebook) {
+            //         // setTimeout(function () {
+            //         //     this.setState({ notebook: notebook, loading: false });
+            //         // }.bind(this), 2000);
+            //         console.log("actions.getNotebook returned");
+            //         this.setState({ notebook: notebook, loading: false });
+            //     }.bind(this))
+            //     ['catch'](function (err) {
+            //         this.setState({ error: err, loading: false });
+            //     }.bind(this));
+
         }
     },
     componentDidMount: function () {
