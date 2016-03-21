@@ -10,6 +10,8 @@ import Loader       from 'appRoot/components/loader';
 import BasicInput   from 'appRoot/components/basicInput';
 import ParagraphEdit from 'appRoot/views/paragraphs/edit';
 
+window.Tools = {}
+window.Tools.React = React;
 
 export default React.createClass({
     mixins: [Reflux.ListenerMixin],
@@ -26,11 +28,12 @@ export default React.createClass({
         console.log("componentWillMount: editMode = " + this.editMode);
         if (this.editMode) {
             console.log("componentWillMount: id = " + this.notebookId);
-            var a = Actions.getNotebook(this.notebookId);
             this.listenTo(Actions.getNotebook.completed, function(notebook) {
                 console.log("actions.getNotebook returned");
                 this.setState({ notebook: notebook, loading: false });
             });
+            Actions.getNotebook(this.notebookId);
+            // Actions.getNotebook(this.notebookId);
             // Actions.getNotebook(this.notebookId).then(function (notebook) {
             //         // setTimeout(function () {
             //         //     this.setState({ notebook: notebook, loading: false });

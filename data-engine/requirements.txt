@@ -1,0 +1,5 @@
+autobahn==0.11.0
+requests==2.9.1
+six==1.10.0
+git+https://github.com/epalese/spark-python.git
+Twisted==15.5.0

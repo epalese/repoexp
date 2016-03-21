@@ -10,7 +10,9 @@ module.exports = {
 		'./js/app' // Your appʼs entry point
     ],
     output: {
-        filename: "js/bundle.js"
+        filename: "js/bundle.js",
+        libraryTarget: "var",
+        library: ["ABC"]
     },
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),

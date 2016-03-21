@@ -8,36 +8,6 @@ import Actions      from 'appRoot/actions';
 import Loader       from 'appRoot/components/loader';
 import marked       from 'marked';
 
-// window.Tools = {};
-// window.Tools.React = React;
-
-var ContentEditable = React.createClass({
-    render: function(){
-        return (
-            <div onInput={this.handleInput}
-                onBlur={this.handleChange}
-                onKeyDown={this.props.onKeyDown}
-                contentEditable="true"
-                dangerouslySetInnerHTML={{__html: this.props.html}}>
-            </div>
-        );
-    },
-    shouldComponentUpdate: function(nextProps){
-        return nextProps.html !== this.getDOMNode().innerHTML;
-    },
-    handleChange: function(){
-        var html = this.getDOMNode().innerHTML;
-        if (this.props.onChange && html !== this.lastHtml) {
-            this.props.onChange({
-                target: {
-                    value: html
-                }
-            });
-        }
-        this.lastHtml = html;
-    }
-});
-
 export default React.createClass({
     getInitialState: function() {
         return { paragraph: {} };
@@ -84,7 +54,7 @@ export default React.createClass({
                 );
             }
             else if (this.state.paragraph.type == 'react') {
-                console.log("keydown react code = " + this.state.paragraph.code);
+                console.log("keydown react code = ");
                 this.setState(
                     update(this.state, {
                         paragraph: { 
@@ -94,10 +64,6 @@ export default React.createClass({
                 );
             }
         }
-        // else if (e.which == 13 & !e.ctrlKey) {
-        //     e.preventDefault();
-        //     document.execCommand('insertHTML', false, '<br><br>');
-        // }
     },
     rawMarkup: function(html) {
         console.log("rawMarkup = " + html);
@@ -127,7 +93,7 @@ export default React.createClass({
                         </textArea>
                     </div>
                     <div className="paragraph-output">
-                        <div dangerouslySetInnerHTML={this.rawMarkup(this.state.paragraph.output)} />
+                        <div>this.state.paragraph.output</div>
                     </div>
                 </div> 
 
@@ -158,6 +124,26 @@ export default React.createClass({
                         <div>{checked_output}</div>
                     </div>
                 </div>
+        }
+        else if (this.state.paragraph.type == 'code') {
+            p =
+                <div className="paragraph">
+                    <div className="paragraph-title">
+                        <h2 >
+                            Paragraph {this.state.paragraph.id}: {this.state.paragraph.type}
+                        </h2>
+                    </div>
+                    <div className="paragraph-code">
+                        <textArea
+                            onChange={this.codeChange}
+                            onKeyDown={this.keyDown}
+                            value={this.state.paragraph.code} >
+                        </textArea>
+                    </div>
+                    <div className="paragraph-output">
+                        <div dangerouslySetInnerHTML={this.rawMarkup(this.state.paragraph.output)} />
+                    </div>
+                </div> 
         }
 
         return p;
