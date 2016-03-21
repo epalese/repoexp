@@ -27,6 +27,7 @@
       "name": "test notebook",
       "user": 1,
       "date": 1457995680565,
+      "id": 1,
       "paragraphs": [
         {
           "output": "Loaded test_csv into test_csv: 3574 rows",
@@ -64,7 +65,7 @@
           "order": 5
         },
         {
-          "output": "userid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
+          "output": "import React from 'react';\nuserid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
           "code": "userid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
           "type": "react",
           "id": "6",

@@ -6,18 +6,12 @@ import { Link }   from 'react-router';
 import ClassNames from 'classnames';
 import Moment     from 'moment';
 import Actions    from 'appRoot/actions';
-import NotebookStore  from 'appRoot/stores/notebooks';
-import UserStore  from 'appRoot/stores/users';
-import Session    from 'appRoot/stores/sessionContext';
+// import NotebookStore  from 'appRoot/stores/notebooks';
 import Loader     from 'appRoot/components/loader';
 
 let dateFormat    = 'MM/DD/YYYY HH:mm:ss';
  
 export default React.createClass({
-    mixins: [
-        Reflux.connect(Session, 'session'),
-        Reflux.connect(UserStore, 'users')
-    ],
     getInitialState: function () {
         return {
             notebook: this.props.notebook
@@ -32,11 +26,11 @@ export default React.createClass({
             this.getNotebook();
         }
     },
-    getUserFromNotebook: function (notebook) {
-        return Array.find(this.state.users, function (user) {
-            return user.id === notebook.user;
-        });
-    },
+    // getUserFromNotebook: function (notebook) {
+    //     return Array.find(this.state.users, function (user) {
+    //         return user.id === notebook.user;
+    //     });
+    // },
     getNotebook: function () {
         if (this.isMounted()) {
             this.setState({loading: true});
@@ -55,37 +49,21 @@ export default React.createClass({
     },
     render: function () {
         if (this.state.loading) { return <Loader />; }
-        var notebook = this.state.notebook
-        ,   user = this.getUserFromNotebook(notebook)
-        ,   name = user.firstName && user.lastName ? 
-                user.firstName + ' ' + user.lastName : 
-                user.firstName ?
-                user.firstName : 
-                user.username
-        ;
+        var notebook = this.state.notebook;
  
         return this.props.mode === 'summary' ? (
             // SUMMARY / LIST VIEW
             <li className="notebook-view-summary">
                 <aside>
-                    <img className="profile-img small" src={user.profileImageData} />
-                    <div className="notebook-metadata">
-                        <strong>{notebook.name}</strong>
-                        <span className="user-name">{name}</span>
-                        <em>{Moment(notebook.date, 'x').format(dateFormat)}</em> 
-                    </div>
-                </aside>
-                &nbsp;
-                <Link to={`/notebooks/${notebook.id}`}>Open</Link> 
-                {
-                    user.id === this.state.session.id ? (
-                        <div>
-                            <Link to={`/notebooks/${notebook.id}/edit`}>
-                                <button>edit notebook</button>
-                            </Link>
+                    <Link to={`/notebooks/${notebook.id}/edit`}>
+                        <div className="notebook-metadata">
+                            <strong>{notebook.name}</strong>
+                            &nbsp;
+                            <em>({Moment(notebook.date, 'x').format(dateFormat)})</em>
+                            
                         </div>
-                    ) : ''
-                }
+                    </Link>
+                </aside>
             </li> 
         ) : (
             // FULL Notebook VIEW
@@ -93,10 +71,8 @@ export default React.createClass({
 
                 <div className="notebook-view-container">
                     <h2>
-                        <img className="profile-img" src={user.profileImageData} />
                         <div className="notebook-metadata">
                             <strong>{notebook.title}</strong>
-                            <span className="user-name">{name}</span>
                             <em>{Moment(notebook.date, 'x').format(dateFormat)}</em> 
                         </div> 
                     </h2>

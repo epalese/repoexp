@@ -9,43 +9,38 @@ export default Reflux.createStore({
     notebooks: [],
     // called when mixin is used to init the component state
     getInitialState: function() {
-        console.log('stores.notebooks.getInitialState: ' + this.notebooks);
         return this.notebooks;
     },
     init: function () {
-        console.log('stores.notebooks: init');
-        Request
-            .get(this.endpoint)
-            .end(function (err, res) {
-                if (res.ok) {
-                    this.notebooks = res.body;
-                    console.log('stores.notebooks.init: ' + res.body[0].name);
-                    this.trigger(this.notebooks);
-                } else {
-                }
-            }.bind(this)); 
+        var req = Request.get(this.endpoint);
+        req.end(function (err, res) {
+            if (res.ok) {
+                this.notebooks = res.body;
+                this.trigger(this.notebooks);
+            } else {
+                console.log('stores.notebooks.init: error');
+            }
+        }.bind(this));
     },
     onGetNotebook: function(id) {
-        console.log("onGetNotebook: id = " + id);
         function req() {
-            Request
-                .get(this.endpoint)
-                .query({
-                    id: id
-                })
-                .end(function(err, res) {
-                    if (res.ok) {
-                        if (res.body.length > 0) {
-                            Actions.getNotebook.completed(res.body[0]);
-                        } else {
-                            Actions.getNotebook.failed('Notebook (' + id + ') not found');    
-                        }
+            console.log("onGetNotebook: req = " + id);
+            var req = Request.get(this.endpoint).query({id: id});
+            req.end(function(err, res) {
+                if (res.ok) {
+                    // console.log("onGetNotebook: res.ok = " + res.ok);
+                    if (res.body.length > 0) {
+                        Actions.getNotebook.completed(res.body[0]);
                     } else {
-                        Actions.getNotebook.failed(err);
+                        Actions.getNotebook.failed('Notebook (' + id + ') not found');    
                     }
-                })
+                } else {
+                    Actions.getNotebook.failed(err);
+                }
+            });
         }
-        Config.loadTimeSimMs ? setTimeout(req.bind(this), Config.loadTimeSimMs) : req();
+        req.bind(this)();
+        // Config.loadTimeSimMs ? setTimeout(req.bind(this), Config.loadTimeSimMs) : req();
     },
     onModifyNotebook: function (notebook, id) {
         console.log("onModifyNotebook: notebook = " + notebook);

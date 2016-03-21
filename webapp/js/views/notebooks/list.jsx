@@ -1,17 +1,18 @@
 "use strict";
 
 import React      from 'react';
-import UserList   from 'appRoot/views/users/list';
+import { Link }   from 'react-router';
 import NotebookList   from 'appRoot/components/notebooks/list';
  
 export default React.createClass({
    render: function () {
-        console.log("views notebooks render");
+        console.log("views.notebooks.list.render");
         return (
-            <div className="notebook-list-view">
-                <NotebookList />
+            <div>
+                <div className="notebook-list-view">
+                    <NotebookList />
+                </div>
             </div>
         );
     }
 });
- 
