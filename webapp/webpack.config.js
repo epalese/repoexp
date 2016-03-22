@@ -12,7 +12,7 @@ module.exports = {
     output: {
         filename: "js/bundle.js",
         libraryTarget: "var",
-        library: ["ABC"]
+        library: ["tool"]
     },
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),

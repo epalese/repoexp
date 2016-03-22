@@ -10,8 +10,6 @@ import Loader       from 'appRoot/components/loader';
 import BasicInput   from 'appRoot/components/basicInput';
 import ParagraphEdit from 'appRoot/views/paragraphs/edit';
 
-window.Tools = {}
-window.Tools.React = React;
 
 export default React.createClass({
     mixins: [Reflux.ListenerMixin],
