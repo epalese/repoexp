@@ -45,7 +45,7 @@ export default React.createClass({
                 loading: false,
                 notebook: data
             });
-        }.bind(this));      
+        }.bind(this));
     },
     render: function () {
         if (this.state.loading) { return <Loader />; }

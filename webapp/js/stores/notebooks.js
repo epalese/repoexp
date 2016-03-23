@@ -3,10 +3,15 @@ import Actions from 'appRoot/actions';
 import Request from 'superagent';
 import Config from 'appRoot/appConfig';
 
+
 export default Reflux.createStore({
     listenables: Actions,
     endpoint: Config.apiRoot + '/notebooks',
     notebooks: [],
+    sock: null,
+    responseDeffers: {},
+    requestId: 1,
+
     // called when mixin is used to init the component state
     getInitialState: function() {
         return this.notebooks;
@@ -19,6 +24,80 @@ export default Reflux.createStore({
                 this.trigger(this.notebooks);
             } else {
                 console.log('stores.notebooks.init: error');
+            }
+        }.bind(this));
+        this.initWS();
+    },
+    initWS: function() {
+        var wsuri;
+        if (window.location.protocol === "file:") {
+            wsuri = "ws://127.0.0.1:3001";
+        } else {
+            wsuri = "ws://" + window.location.hostname + ":3001";
+        }
+        if ("WebSocket" in window) {
+            this.sock = new WebSocket(wsuri);
+        } else if ("MozWebSocket" in window) {
+            this.sock = new MozWebSocket(wsuri);
+        } else {
+            console.log("Browser does not support WebSocket!");
+            window.location = "http://autobahn.ws/unsupportedbrowser";
+        }
+        if (this.sock) {
+            this.sock.onopen = function() {
+                console.log("Connected to " + wsuri);
+            };
+            this.sock.onclose = function(e) {
+                console.log("Connection closed (wasClean = " + 
+                    e.wasClean + 
+                    ", code = " + 
+                    e.code + 
+                    ", reason = '" + 
+                    e.reason + "')");
+                this.sock = null;
+            };
+            // let requestId = selectn('message.data.request_id');
+            // if (!requestId) return;
+            // //resolve or reject the promise which is kept in ActionCreator
+            // if (message.data.result === 'Ok') resolveRequest(requestId, message);
+            // else rejectRequest(requestId, message.error);
+
+            this.sock.onmessage = function(e) {
+                console.log('ws response: ' + e);
+                var response = JSON.parse(e.data);
+                console.log('ws response: ');
+                console.log(response);
+                console.log(this.responseDeffers[response.id]);
+                this.responseDeffers[response.id].resolve(response);
+                this.onSendWSCompleted("arisuca");
+                // delete this.responseDeffers[response.id];
+                // callback = globalCallbacks[response.id];
+                // callback(response);
+            }.bind(this);
+        }
+    },
+    onSendWSCompleted: function(msg) {
+        console.log("suca");
+    },
+    onSendWS: function (msg) {
+        console.log("SUCAAAAAA");
+        var req = {
+            id: this.requestId++,
+            payload: msg
+        }
+        console.log("[stores.notebook.onSendWS] req = ");
+        console.log(req);
+        return new Promise(function(resolve, reject) {
+            this.responseDeffers[req.id] = {
+                resolve,
+                reject
+            };
+            if (this.sock) {
+                var strReq = JSON.stringify(req);
+                this.sock.send(strReq);
+                console.log("Sent msg : " + strReq);
+            } else {
+                reject('Websocket connection is closed');
             }
         }.bind(this));
     },
@@ -41,7 +120,6 @@ export default Reflux.createStore({
         }
         req.bind(this)();
         // Config.loadTimeSimMs ? setTimeout(req.bind(this), Config.loadTimeSimMs) : req();
-
     },
     onModifyNotebook: function (notebook, id) {
         console.log("onModifyNotebook: notebook = " + notebook);

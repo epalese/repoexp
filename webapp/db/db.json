@@ -31,7 +31,7 @@
       "paragraphs": [
         {
           "output": "Loaded test_csv into test_csv: 3574 rows",
-          "code": "this.F.downloadCSV(\"https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv\", \"test_csv\");\nthis.F.loadCSV(\"test_csv\");",
+          "code": "%getCSV https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv test_csv",
           "type": "code",
           "id": "1",
           "order": 1
@@ -45,7 +45,7 @@
         },
         {
           "output": "Department:string\nEntity:string\nDate_of_Payment:string\nExpense_Type:string\nExpense_Area:string\nSupplier:string\nTransaction_Number:string\nAmount:string\nDescription:string\nSupplier_Post_Code:string\nSupplier_Type:string\nContract_Number:string\nProject_Code:string\nExpenditure_Type:string",
-          "code": "this.F.describe(\"test_csv\");",
+          "code": "%describe test_csv",
           "type": "code",
           "id": "3",
           "order": 3

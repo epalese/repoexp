@@ -9,10 +9,16 @@ import Loader       from 'appRoot/components/loader';
 import marked       from 'marked';
 
 export default React.createClass({
+    mixins: [Reflux.ListenerMixin],
     getInitialState: function() {
         return { paragraph: {} };
     },
     componentWillMount: function() {
+        this.listenTo(Actions.sendWS.completed, function(response) {
+            console.log("actions.sendWS completed");
+            console.log(response);
+            // this.setState({ notebook: notebook, loading: false });
+        });
         this.editMode = this.props.hasOwnProperty('paragraphId');
         if (this.editMode) {
             // check the paragraph type and process the output
@@ -63,10 +69,17 @@ export default React.createClass({
                     })
                 );
             }
+            else if (this.state.paragraph.type == 'code') {
+                console.log("keydown code");
+                console.log("keydown code: code = " + this.state.paragraph.code);
+                var msg = {id: this.props.paragraphId, type: 'code', content: this.state.paragraph.code};
+                Actions.sendWS(msg).then(function() {
+                    console.log("Suca 2");
+                });
+            }
         }
     },
     rawMarkup: function(html) {
-        console.log("rawMarkup = " + html);
         var rawMarkup = marked(
             html,
             {sanitize: true}
@@ -77,7 +90,6 @@ export default React.createClass({
         var p = null;
 
         if (this.state.paragraph.type == 'markdown') {
-            console.log("Rerendering markdown");
             p =
                 <div className="paragraph">
                     <div className="paragraph-title">

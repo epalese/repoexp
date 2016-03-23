@@ -88,21 +88,26 @@ class EchoServerProtocol(WebSocketServerProtocol):
             msg = self.queue.get()
             if msg is None:
                 return
-            payload = msg[0]
+            print "in process: " + str(msg)
+            request = msg[0]
             isBinary = msg[1]
-            print "[%s] processing payload: %s, isBinary: %s" % (
-                self.peer, str(payload), str(isBinary))
-            jpayload = json.loads(payload)
-            id = jpayload['id']
-            type = str(jpayload['type'])
-            payload = str(jpayload['payload'])
+            print "[%s] processing request: %s, isBinary: %s" % (
+                self.peer, str(request), str(isBinary))
+            jrequest = json.loads(request)
+            id = jrequest['id']
+            type = str(jrequest['payload']['type'])
+            content = str(jrequest['payload']['content'])
+            print "[%s] processing payload: %s, %s, %s" % (
+                self.peer, id, type, content)
             if type == 'code':
-                (func, params) = parsePayload(payload)
+                (func, params) = parsePayload(content)
+                print "############### %s, %s " % (func, params)
                 if func == '%getCSV':
                     result = self.getCSV(
                         id=id,
                         url=params[0],
                         filename=params[1])
+                    print "############### getCSV " + str(result)
                     self.printResult(result)
                 elif func == '%loadCSV':
                     result = self.loadCSV(

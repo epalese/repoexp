@@ -62,7 +62,6 @@ export default React.createClass({
     },
     // form parts of component is always the same so render won't diff
     render: function () {
-        console.log(this.state.notebook.paragraphs);
         var paragraphsUI = this.state.notebook.paragraphs ?
             this.state.notebook.paragraphs.map(
                 function (paragraph) {
