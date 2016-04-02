@@ -10,6 +10,7 @@
 
 import json
 import sys
+import os
 import requests
 import csv
 import Queue
@@ -23,7 +24,8 @@ from autobahn.twisted.websocket import WebSocketServerFactory
 from autobahn.twisted.websocket import WebSocketServerProtocol
 
 import spark_python.spark_python as sp
-sp.bootstrap('/Users/fix/dev/spark-1.4.1-bin-hadoop2.6/')
+cur_dir = os.path.dirname(os.path.realpath(__file__))
+sp.bootstrap(cur_dir + '/spark-1.6.1')
 import pyspark
 from pyspark.context import SparkContext
 from pyspark.sql import SQLContext
