@@ -7,10 +7,22 @@ import Reflux       from 'reflux';
 import Actions      from 'appRoot/actions';
 import Loader       from 'appRoot/components/loader';
 import marked       from 'marked';
+import NotebookStore    from 'appRoot/stores/notebooks';
 
 export default React.createClass({
-    mixins: [Reflux.ListenerMixin],
+    // mixins: [Reflux.ListenerMixin],
+    // mixins: [Reflux.connectFilter(NotebookStore, "paragraphs", function(paragraphs) {
+    //     return paragraphs.filter(function(paragraph) {
+    //         console.log("mixins: paragraph_id = " + paragraph.id)
+    //         return paragraph.id === this.props.paragraph.id;
+    //     }.bind(this)
+    //     )[0];
+    // })],
+
     getInitialState: function() {
+        console.log("getInitialState");
+        console.log(this.props.paragraph);
+        // return { paragraph: this.props.paragraph };
         return { paragraph: {} };
     },
     componentWillMount: function() {
@@ -73,8 +85,10 @@ export default React.createClass({
                 console.log("keydown code");
                 console.log("keydown code: code = " + this.state.paragraph.code);
                 var msg = {id: this.props.paragraphId, type: 'code', content: this.state.paragraph.code};
-                Actions.sendWS(msg).then(function() {
-                    console.log("Suca 2");
+                Actions.sendMsgWS(msg).then(function() {
+                    // signal that the message has been sent 
+                    // and the server is processing the request
+                    console.log("Message sent and under processing...");
                 });
             }
         }

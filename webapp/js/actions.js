@@ -9,7 +9,10 @@ export default Reflux.createActions({
     'modifyNotebook': {
         asyncResult: true
     },
-    'sendWS': {
-        asyncResult: true  
+    'sendMsgWS': {
+        asyncResult: true
+    },
+    'receiveMsgWS': {
+        asyncResult: true
     }
 });

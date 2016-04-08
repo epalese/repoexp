@@ -3,7 +3,7 @@
 import React            from 'react';
 import Reflux           from 'reflux';
 import NotebookStore    from 'appRoot/stores/notebooks';
-import NotebookView     from 'appRoot/views/notebooks/view';
+import NotebookItem     from 'appRoot/views/notebooks/listItem';
 
 
 export default React.createClass({
@@ -17,8 +17,9 @@ export default React.createClass({
             return notebook.user == this.props.user;
         }.bind(this)) : this.state.notebooks;
         var notebooksUI = notebooks.map(function (notebook) {
-            console.log("notbook id = " + notebook.id);
-            return <NotebookView key={notebook.id} notebook={notebook} mode="summary"/>;
+            console.log(notebook);
+            // return <NotebookView key={notebook.id} notebook={notebook} mode="summary"/>;
+            return <NotebookItem key={notebook.id} notebook={notebook} />;
         });
         return (
             <div className="notebook-list">

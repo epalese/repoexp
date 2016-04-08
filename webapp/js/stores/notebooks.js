@@ -8,8 +8,8 @@ export default Reflux.createStore({
     listenables: Actions,
     endpoint: Config.apiRoot + '/notebooks',
     notebooks: [],
+    paragraphs: [],
     sock: null,
-    responseDeffers: {},
     requestId: 1,
 
     // called when mixin is used to init the component state
@@ -56,36 +56,22 @@ export default Reflux.createStore({
                     e.reason + "')");
                 this.sock = null;
             };
-            // let requestId = selectn('message.data.request_id');
-            // if (!requestId) return;
-            // //resolve or reject the promise which is kept in ActionCreator
-            // if (message.data.result === 'Ok') resolveRequest(requestId, message);
-            // else rejectRequest(requestId, message.error);
 
             this.sock.onmessage = function(e) {
                 console.log('ws response: ' + e);
                 var response = JSON.parse(e.data);
                 console.log('ws response: ');
                 console.log(response);
-                console.log(this.responseDeffers[response.id]);
-                this.responseDeffers[response.id].resolve(response);
-                this.onSendWSCompleted("arisuca");
-                // delete this.responseDeffers[response.id];
-                // callback = globalCallbacks[response.id];
-                // callback(response);
+                
             }.bind(this);
         }
     },
-    onSendWSCompleted: function(msg) {
-        console.log("suca");
-    },
-    onSendWS: function (msg) {
-        console.log("SUCAAAAAA");
+    onSendMsgWS: function (msg) {
         var req = {
             id: this.requestId++,
             payload: msg
         }
-        console.log("[stores.notebook.onSendWS] req = ");
+        console.log("[stores.notebooks.onSendMsgWS] req = ");
         console.log(req);
         return new Promise(function(resolve, reject) {
             this.responseDeffers[req.id] = {
@@ -95,15 +81,15 @@ export default Reflux.createStore({
             if (this.sock) {
                 var strReq = JSON.stringify(req);
                 this.sock.send(strReq);
-                console.log("Sent msg : " + strReq);
+                console.log("[stores.notebooks.onSendMsgWS] Sent msg : " + strReq);
+                Actions.sendMsgWS.completed(res.body[0]);
             } else {
-                reject('Websocket connection is closed');
+                Actions.sendMsgWS.failed('[stores.notebooks.onSendMsgWS] Notebook (' + id + ') not found');
             }
         }.bind(this));
     },
     onGetNotebook: function(id) {
         function req() {
-            console.log("onGetNotebook: req = " + id);
             var req = Request.get(this.endpoint).query({id: id});
             req.end(function(err, res) {
                 if (res.ok) {

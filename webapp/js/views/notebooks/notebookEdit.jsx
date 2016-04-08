@@ -89,14 +89,3 @@ export default React.createClass({
         );
     }
 });
-
-// <form
-//     className="notebook-edit" 
-//     onSubmit={this.submit} >
-//     { this.state.loading ? <Loader /> : [] }
-//     <fieldset
-//         style={{ display: this.state.loading || this.state.error ? 'none' : 'block'}}>
-//         <button type="submit">{this.editMode ? 'Edit Notebook' : 'Create Notebook'}</button>
-//     </fieldset>
-// </form>
- 

@@ -4,7 +4,7 @@ import { Router, Route, Link, hashHistory } from 'react-router'
 import CSS            from '../css/app.less';
 import AppHeader      from 'appRoot/views/appHeader';
 import NotebookList   from 'appRoot/views/notebooks/list';
-import NotebookEdit   from 'appRoot/views/notebooks/edit';
+import NotebookEdit   from 'appRoot/views/notebooks/notebookEdit';
 
 let AppLayout = React.createClass({
 render: function () {
