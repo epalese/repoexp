@@ -6,6 +6,8 @@ import AppHeader      from 'appRoot/views/appHeader';
 import NotebookList   from 'appRoot/views/notebooks/list';
 import NotebookEdit   from 'appRoot/views/notebooks/notebookEdit';
 
+window.React = React;
+
 let AppLayout = React.createClass({
 render: function () {
     console.log("app.jsx");
@@ -51,5 +53,3 @@ ReactDom.render((
         {routes}
     </Router>
 ), document.getElementById('app'))
-
-export {React as React};

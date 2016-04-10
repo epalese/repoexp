@@ -13,6 +13,5 @@ export default Reflux.createActions({
         asyncResult: true
     },
     'receiveMsgWS': {
-        asyncResult: true
     }
 });

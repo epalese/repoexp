@@ -52,7 +52,7 @@ import csv
 from pyspark.sql.types import *
 
 
-def getCSV(url, filename):
+def downloadCSV(url, filename):
     msg = "Getting CSV file from url=%s and filename=%s"
     print msg % (url, filename)
     r = requests.get(url)
@@ -72,8 +72,17 @@ def getCSV(url, filename):
     csv_df = sqlContext.createDataFrame(csv_rdd, schema)
     folderName = "./data/" + filename
     csv_df.write.save(folderName, format="parquet", mode="overwrite")
-    count = csv_df.count()
-    return count
+    csv_df.registerTempTable(filename)
+    return csv_df
+
+def dataFrameToJavaScriptVariable(df, js_var_name):
+    jsonData = df.toJSON().collect()
+    message = {
+        "varName": js_var_name,
+        "jsonData":jsonData
+    }
+    jsonMessage = json.dumps(message)
+    sneakyMessage(jsonMessage)
 
 """
 
@@ -143,7 +152,7 @@ class DataEngineServerProtocol(WebSocketServerProtocol):
         output = json.dumps({
             "id": str(id).encode('utf-8'),
             "type": str("code").encode('utf-8'),
-            "varname": str(self.peer).encode('utf-8'),
+            # "varname": str(self.peer).encode('utf-8'),
             "output": s.getvalue().encode('utf-8')
         })
         print "[%s] process> processing %s finished" % (self.peer, id)

@@ -7,53 +7,53 @@
       "id": 1,
       "paragraphs": [
         {
-          "output": "Loaded test_csv into test_csv: 3574 rows",
-          "code": "getCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')",
+          "output": "",
+          "code": "df = downloadCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')\ndf.show()",
           "type": "code",
           "id": "1",
           "order": 1
         },
         {
-          "output": "Received JSON",
-          "code": "this.F.sql(\"csv\", \"SELECT Department, Date_of_Payment, Amount FROM test_csv LIMIT 10\");",
+          "output": "",
+          "code": "df2 = df.withColumn(\"Amount\", df.Amount.cast(\"float\"))\ndf.printSchema()\ndf.show()\n",
           "type": "code",
           "id": "2",
           "order": 2
         },
         {
-          "output": "Department:string\nEntity:string\nDate_of_Payment:string\nExpense_Type:string\nExpense_Area:string\nSupplier:string\nTransaction_Number:string\nAmount:string\nDescription:string\nSupplier_Post_Code:string\nSupplier_Type:string\nContract_Number:string\nProject_Code:string\nExpenditure_Type:string",
-          "code": "%describe test_csv",
+          "output": "",
+          "code": "dataFrameToJavaScriptVariable(df2, \"myvar\")",
           "type": "code",
           "id": "3",
           "order": 3
         },
         {
-          "output": "",
-          "code": "var tbl = React.createClass({\n    getInitialState: function() {\n        return {\n            data: csv\n        }\n    },\n    render: function() {\n        return React.createElement(Griddle, {results: this.state.data})\n    }\n});\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(tbl)\n)",
+          "output": "userid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
+          "code": "userid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
           "type": "react",
           "id": "4",
           "order": 4
         },
         {
-          "output": "This is **another** comment",
-          "code": "This is **another** comment.  \nCiao",
-          "type": "markdown",
+          "output": "var disp = React.createClass({ getInitialState: function() { return {value: userid}; }, render: function() { return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: function() {}}); } }); React.createElement( \"div\", {}, React.createElement(disp) )",
+          "code": "var disp = React.createClass({ getInitialState: function() { return {value: userid}; }, render: function() { return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: function() {}}); } }); React.createElement( \"div\", {}, React.createElement(disp) )",
+          "type": "react",
           "id": "5",
           "order": 5
         },
         {
-          "output": "import React from 'react';\nuserid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
-          "code": "userid = \"\";\nvar comp = React.createClass({\n            getInitialState: function() {\n                userid = 'Hello!';\n                return {value: 'Hello!'};\n            },\n            handleChange: function(event) {\n                this.setState({value: event.target.value});\n                userid = event.target.value;\n            },\n            render: function() {\n                return React.createElement(\"input\", { type: \"text\", value: this.state.value, onChange: this.handleChange })\n            }\n        });\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(comp)\n)",
-          "type": "react",
+          "output": "This is **another** comment",
+          "code": "This is **another** comment.  \nCiao",
+          "type": "markdown",
           "id": "6",
           "order": 6
         },
         {
-          "output": "Tables: test_csv",
-          "code": "this.F.listTables()",
-          "type": "code",
+          "output": "",
+          "code": "var tbl = React.createClass({\n    getInitialState: function() {\n        return {\n            data: csv\n        }\n    },\n    render: function() {\n        return React.createElement(Griddle, {results: this.state.data})\n    }\n});\n\nReact.createElement(\n    \"div\",\n    {className: \"commentBox\"},\n    React.createElement(tbl)\n)",
+          "type": "react",
           "id": "7",
-          "order": "7"
+          "order": 7
         }
       ]
     }

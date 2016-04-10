@@ -8,7 +8,7 @@ export default Reflux.createStore({
     listenables: Actions,
     endpoint: Config.apiRoot + '/notebooks',
     notebooks: [],
-    paragraphs: [],
+    // paragraphs: [],
     sock: null,
     requestId: 1,
 
@@ -61,12 +61,13 @@ export default Reflux.createStore({
                 var response = JSON.parse(e.data);
                 console.log(`ws response: ${response}`);
                 console.log(response);
-                for (var i=0; i < this.paragraphs.length; i++) {
-                    if (this.paragraphs[i].id == response.id) {
-                        this.paragraphs[i].output = response.output;
-                    }
-                }
-                this.trigger(this.paragraphs);
+                // for (var i=0; i < this.paragraphs.length; i++) {
+                //     if (this.paragraphs[i].id == response.id) {
+                //         this.paragraphs[i].output = response.output;
+                //     }
+                // }
+                // this.trigger(this.paragraphs);
+                Actions.receiveMsgWS(response.id, response); 
             }.bind(this);
         }
     },
@@ -95,8 +96,8 @@ export default Reflux.createStore({
                     if (res.body.length > 0) {
                         Actions.getNotebook.completed(res.body[0]);
                         console.log(`onGetNotebook: res.ok = ${res.body[0]}`);
-                        this.paragraphs = res.body[0].paragraphs;
-                        this.trigger(this.paragraphs);
+                        // this.paragraphs = res.body[0].paragraphs;
+                        // this.trigger(this.paragraphs);
                     } else {
                         Actions.getNotebook.failed('Notebook (' + id + ') not found');    
                     }
