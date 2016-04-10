@@ -61,12 +61,11 @@ export default Reflux.createStore({
                 var response = JSON.parse(e.data);
                 console.log(`ws response: ${response}`);
                 console.log(response);
-                // for (var i=0; i < this.paragraphs.length; i++) {
-                //     if (this.paragraphs[i].id == response.id) {
-                //         this.paragraphs[i].output = response.output;
-                //     }
-                // }
-                // this.trigger(this.paragraphs);
+                if (response.type == 'sneakyMessage') {
+                    console.log("SNEAKYMESSAGE");
+                    window[response.payload.varName] = response.payload.jsonData;
+                }
+                
                 Actions.receiveMsgWS(response.id, response); 
             }.bind(this);
         }

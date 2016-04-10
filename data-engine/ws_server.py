@@ -81,8 +81,7 @@ def dataFrameToJavaScriptVariable(df, js_var_name):
         "varName": js_var_name,
         "jsonData":jsonData
     }
-    jsonMessage = json.dumps(message)
-    sneakyMessage(jsonMessage)
+    sneakyMessage(message)
 
 """
 
@@ -126,7 +125,8 @@ class DataEngineServerProtocol(WebSocketServerProtocol):
     def sneakyMessage(self, message):
         output = json.dumps({
             "type": str("sneakyMessage").encode('utf-8'),
-            "output": message.encode('utf-8')
+            # "payload": message.encode('utf-8')
+            "payload": message
         })
         reactor.callFromThread(self.sendMessage, output, False)
 
