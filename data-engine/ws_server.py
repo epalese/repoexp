@@ -139,10 +139,7 @@ class DataEngineServerProtocol(WebSocketServerProtocol):
 
         with stdoutIO() as s:
             exec(message["payload"]["content"], self.namespace)
-
-        sleep_time = int(message["payload"]["sleep_time"])
-        sleep(sleep_time)
-        id = message["id"]
+        id = message["payload"]["id"]
         output = json.dumps({
             "id": str(id).encode('utf-8'),
             "type": str("code").encode('utf-8'),

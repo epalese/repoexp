@@ -1,27 +1,4 @@
 {
-  "posts": [
-    {
-      "title": "dadasdasda",
-      "body": "<div>Hello World!</div><div><b>This</b> is my FUCKING story...</div><div><br></div>",
-      "user": 1,
-      "date": 1457995680565,
-      "summary": "Hello World!\nThis is my FUCKING story...\n\n",
-      "id": 1
-    }
-  ],
-  "users": [
-    {
-      "blogName": "test12345",
-      "username": "emanuele",
-      "password": "emanuele",
-      "profileImage": "",
-      "firstName": "emanuele",
-      "lastName": "emanuele",
-      "email": "emanuele.palese@gmail.com",
-      "profileImageData": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+Cjxzdmcgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogPCEtLSBDcmVhdGVkIHdpdGggTWV0aG9kIERyYXcgLSBodHRwOi8vZ2l0aHViLmNvbS9kdW9waXhlbC9NZXRob2QtRHJhdy8gLS0+CiA8Zz4KICA8dGl0bGU+YmFja2dyb3VuZDwvdGl0bGU+CiAgPHJlY3QgZmlsbD0iIzAwZmZmZiIgaWQ9ImNhbnZhc19iYWNrZ3JvdW5kIiBoZWlnaHQ9IjgyIiB3aWR0aD0iODIiIHk9Ii0xIiB4PSItMSIvPgogIDxnIGRpc3BsYXk9Im5vbmUiIG92ZXJmbG93PSJ2aXNpYmxlIiB5PSIwIiB4PSIwIiBoZWlnaHQ9IjEwMCUiIHdpZHRoPSIxMDAlIiBpZD0iY2FudmFzR3JpZCI+CiAgIDxyZWN0IGZpbGw9InVybCgjZ3JpZHBhdHRlcm4pIiBzdHJva2Utd2lkdGg9IjAiIHk9IjAiIHg9IjAiIGhlaWdodD0iMTAwJSIgd2lkdGg9IjEwMCUiLz4KICA8L2c+CiA8L2c+CiA8Zz4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPGVsbGlwc2Ugcnk9IjE1IiByeD0iMTUiIGlkPSJzdmdfMSIgY3k9IjMyLjUiIGN4PSI0MCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2U9IiMwMDAiIGZpbGw9IiNmZmYiLz4KICA8ZWxsaXBzZSBzdHJva2U9IiMwMDAiIHJ5PSI2MS41IiByeD0iMzguNDk5OTk4IiBpZD0ic3ZnXzIiIGN5PSIxMTIiIGN4PSIzOS41IiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9IiNmZmYiLz4KIDwvZz4KPC9zdmc+",
-      "id": 1
-    }
-  ],
   "notebooks": [
     {
       "name": "test notebook",
@@ -31,7 +8,7 @@
       "paragraphs": [
         {
           "output": "Loaded test_csv into test_csv: 3574 rows",
-          "code": "%getCSV https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv test_csv",
+          "code": "getCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')",
           "type": "code",
           "id": "1",
           "order": 1

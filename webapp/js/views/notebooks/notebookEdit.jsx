@@ -23,26 +23,14 @@ export default React.createClass({
         this.notebookId = this.editMode ? this.props.params.notebookId : null;
         this.setState({ loading: this.editMode ? true : false });
 
-        console.log("componentWillMount: editMode = " + this.editMode);
+        // console.log("componentWillMount: editMode = " + this.editMode);
         if (this.editMode) {
-            console.log("componentWillMount: id = " + this.notebookId);
+            // console.log("componentWillMount: id = " + this.notebookId);
             this.listenTo(Actions.getNotebook.completed, function(notebook) {
-                console.log("actions.getNotebook returned");
+                // console.log("actions.getNotebook returned");
                 this.setState({ notebook: notebook, loading: false });
             });
             Actions.getNotebook(this.notebookId);
-            // Actions.getNotebook(this.notebookId);
-            // Actions.getNotebook(this.notebookId).then(function (notebook) {
-            //         // setTimeout(function () {
-            //         //     this.setState({ notebook: notebook, loading: false });
-            //         // }.bind(this), 2000);
-            //         console.log("actions.getNotebook returned");
-            //         this.setState({ notebook: notebook, loading: false });
-            //     }.bind(this))
-            //     ['catch'](function (err) {
-            //         this.setState({ error: err, loading: false });
-            //     }.bind(this));
-
         }
     },
     componentDidMount: function () {
@@ -67,8 +55,9 @@ export default React.createClass({
                 function (paragraph) {
                     return (<ParagraphEdit key={paragraph.id}
                                 paragraphId={paragraph.id}
-                                paragraph={paragraph} />);
-                })
+                                paragraphs={paragraph} />);
+                }
+                )
             : [];
         return (
             <div>

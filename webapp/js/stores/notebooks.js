@@ -58,35 +58,34 @@ export default Reflux.createStore({
             };
 
             this.sock.onmessage = function(e) {
-                console.log('ws response: ' + e);
                 var response = JSON.parse(e.data);
-                console.log('ws response: ');
+                console.log(`ws response: ${response}`);
                 console.log(response);
-                
+                for (var i=0; i < this.paragraphs.length; i++) {
+                    if (this.paragraphs[i].id == response.id) {
+                        this.paragraphs[i].output = response.output;
+                    }
+                }
+                this.trigger(this.paragraphs);
             }.bind(this);
         }
     },
-    onSendMsgWS: function (msg) {
+    onSendMsgWS: function (paragraph_id, msg) {
         var req = {
-            id: this.requestId++,
+            requestId: this.requestId++,
             payload: msg
         }
-        console.log("[stores.notebooks.onSendMsgWS] req = ");
-        console.log(req);
-        return new Promise(function(resolve, reject) {
-            this.responseDeffers[req.id] = {
-                resolve,
-                reject
-            };
-            if (this.sock) {
-                var strReq = JSON.stringify(req);
-                this.sock.send(strReq);
-                console.log("[stores.notebooks.onSendMsgWS] Sent msg : " + strReq);
-                Actions.sendMsgWS.completed(res.body[0]);
-            } else {
-                Actions.sendMsgWS.failed('[stores.notebooks.onSendMsgWS] Notebook (' + id + ') not found');
-            }
-        }.bind(this));
+        // console.log(`[stores.notebooks.onSendMsgWS] paragraph id = ${paragraph_id} req = `);
+        // console.log(req);
+        if (this.sock) {
+            var strReq = JSON.stringify(req);
+            this.sock.send(strReq);
+            console.log("[stores.notebooks.onSendMsgWS] Sent msg : " + strReq);
+            Actions.sendMsgWS.completed(paragraph_id, msg);
+        } else {
+            console.log("[stores.notebooks.onSendMsgWS] socket not initialised");
+            Actions.sendMsgWS.failed('Socket not found');
+        }
     },
     onGetNotebook: function(id) {
         function req() {
@@ -95,14 +94,16 @@ export default Reflux.createStore({
                 if (res.ok) {
                     if (res.body.length > 0) {
                         Actions.getNotebook.completed(res.body[0]);
-                        console.log("onGetNotebook: res.ok = " + res.body[0]);
+                        console.log(`onGetNotebook: res.ok = ${res.body[0]}`);
+                        this.paragraphs = res.body[0].paragraphs;
+                        this.trigger(this.paragraphs);
                     } else {
                         Actions.getNotebook.failed('Notebook (' + id + ') not found');    
                     }
                 } else {
                     Actions.getNotebook.failed(err);
                 }
-            });
+            }.bind(this));
         }
         req.bind(this)();
         // Config.loadTimeSimMs ? setTimeout(req.bind(this), Config.loadTimeSimMs) : req();
