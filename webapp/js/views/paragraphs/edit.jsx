@@ -8,8 +8,8 @@ import Actions      from 'appRoot/actions';
 import Loader       from 'appRoot/components/loader';
 import marked       from 'marked';
 import NotebookStore    from 'appRoot/stores/notebooks';
-// import Chart        from 'react-d3-core';
-// import LineChart    from 'react-d3-basic';
+import {Chart, Bar} from 'appRoot/components/charts';
+
 
 export default React.createClass({
     mixins: [
@@ -85,80 +85,27 @@ export default React.createClass({
                 );
             }
             else if (this.state.paragraphs.type == 'react-chart') {
-                // var width = 700,
-                //     height = 300,
-                //     margins = {left: 100, right: 100, top: 50, bottom: 50},
-                //     title = "User sample",
-                //     chartSeries = [
-                //         {
-                //             field: 'BMI',
-                //             name: 'BMI',
-                //             color: '#ff7f0e'
-                //         }
-                //     ],
-                //     chartData = [
-                //       {
-                //         name: "Lavon Hilll I",
-                //         BMI: 20.57,
-                //         age: 12,
-                //         birthday: "1994-10-26T00:00:00.000Z",
-                //         city: "Annatown",
-                //         married: true,
-                //         index: 1
-                //       },
-                //       {
-                //         name: "Clovis Pagac",
-                //         BMI: 24.28,
-                //         age: 26,
-                //         birthday: "1995-11-10T00:00:00.000Z",
-                //         city: "South Eldredtown",
-                //         married: false,
-                //         index: 3
-                //       },
-                //       {
-                //         name: "Gaylord Paucek",
-                //         BMI: 24.41,
-                //         age: 30,
-                //         birthday: "1975-06-12T00:00:00.000Z",
-                //         city: "Koeppchester",
-                //         married: true,
-                //         index: 5
-                //       },
-                //       {
-                //         name: "Ashlynn Kuhn MD",
-                //         BMI: 23.77,
-                //         age: 32,
-                //         birthday: "1985-08-09T00:00:00.000Z",
-                //         city: "West Josiemouth",
-                //         married: false,
-                //         index: 6
-                //       }
-                //     ],
-                //     x = function(d) {
-                //         return d.index;
-                //     }
-
-                // output = <Chart
-                //     title={title}
-                //     width={width}
-                //     height={height}
-                //     margins= {margins}>
-                //         <LineChart
-                //             margins= {margins}
-                //             title={title}
-                //             data={chartData}
-                //             width={width}
-                //             height={height}
-                //             chartSeries={chartSeries}
-                //             x={x}/>
-                //     </Chart>
-                // this.setState(
-                //     update(this.state, {
-                //         paragraphs: { 
-                //             output: { $set: output }
-                //         }
-                //     })
-                // );
+                var data = [
+                    {x:100, y:10},
+                    {x:200, y:20},
+                    {x:300, y:30}
+                ];
+                var output =
+                    <div>
+                        <Chart width="400"
+                               height="400">
+                          <Bar data={data}
+                              width="400"
+                              height="400" />
+                        </Chart>
+                    </div>
+                this.setState(
+                    update(this.state, {
+                        paragraphs: { 
+                            output: { $set: output }
+                        }
+                    })
+                );
             }
             else if (this.state.paragraphs.type == 'code') {
                 var msg = {id: this.props.paragraphId, type: 'code', content: this.state.paragraphs.code};
