@@ -2,3 +2,4 @@ data-engine/data/*
 data-engine/*
 webapp/node_modules
 webapp/npm-debug.log
+npm-debug.log
