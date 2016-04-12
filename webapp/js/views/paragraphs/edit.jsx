@@ -85,18 +85,31 @@ export default React.createClass({
                 );
             }
             else if (this.state.paragraphs.type == 'react-chart') {
+                // var data = [
+                //     {x:100, y:10},
+                //     {x:200, y:20},
+                //     {x:300, y:30}
+                // ];
+
                 var data = [
-                    {x:100, y:10},
-                    {x:200, y:20},
-                    {x:300, y:30}
+                    {"Supplier":"STUDENT LOANS COMPANY LIMITED","Tot_Amount":1.358617829E9},
+                    {"Supplier":"POST OFFICE LTD","Tot_Amount":8.509302669301758E8},
+                    {"Supplier":"HIGHER EDUCATION FUNDING COUNCIL FOR ENGLAND","Tot_Amount":4.85789888E8},
+                    {"Supplier":"SKILLS FUNDING AGENCY","Tot_Amount":2.6444E8},
+                    {"Supplier":"ENGINEERING AND PHYSICAL SCIENCES RESEARCH COUNCIL","Tot_Amount":1.918E8},
+                    {"Supplier":"BIOTECHNOLOGY AND BIOLOGICAL SCIENCE RESEARCH COUNCIL","Tot_Amount":8.95E7}
                 ];
+                
+
                 var output =
                     <div>
                         <Chart width="400"
                                height="400">
                           <Bar data={data}
                               width="400"
-                              height="400" />
+                              height="400" 
+                              x_axis="Supplier"
+                              y_axis="Tot_Amount" />
                         </Chart>
                     </div>
                 this.setState(

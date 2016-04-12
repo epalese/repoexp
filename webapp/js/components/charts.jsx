@@ -15,7 +15,9 @@ let Chart = React.createClass({
 let Bar = React.createClass({
   getDefaultProps: function() {
     return {
-      data: []
+      data: [],
+      x_axis: undefined,
+      y_axis: undefined
     }
   },
 
@@ -26,8 +28,8 @@ let Bar = React.createClass({
     render: function() {
         var props = this.props;
         var data = props.data.map(function(d) {
-            console.log("inside Bar.shouldComponentUpdate.render: " + d);
-            return d.y;
+            console.log("inside Bar.shouldComponentUpdate.render: " + d[props.y_axis]);
+            return d[props.y_axis];
         });
 
     var yScale = d3.scale.linear()
