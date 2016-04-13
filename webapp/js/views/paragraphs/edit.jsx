@@ -7,8 +7,8 @@ import Reflux       from 'reflux';
 import Actions      from 'appRoot/actions';
 import Loader       from 'appRoot/components/loader';
 import marked       from 'marked';
-import NotebookStore    from 'appRoot/stores/notebooks';
-import {Chart, Bar} from 'appRoot/components/charts';
+import NotebookStore        from 'appRoot/stores/notebooks';
+import {Chart, Bar, XYAxis} from 'appRoot/components/charts';
 
 
 export default React.createClass({
@@ -86,17 +86,32 @@ export default React.createClass({
             }
             else if (this.state.paragraphs.type == 'react-chart') {
                 var data = [
-                    {x:100, y:10},
-                    {x:200, y:20},
-                    {x:300, y:30}
+                    {cibo:"sugo pronto", y:10},
+                    {cibo:"minestrone", y:20},
+                    {cibo:"panzerotti", y:30}
                 ];
                 var output =
                     <div>
                         <Chart width="400"
-                               height="400">
-                          <Bar data={data}
-                              width="400"
-                              height="400" />
+                                height="400">
+                            <Bar data={data}
+                                x_axis_variable="cibo"
+                                y_axis_variable="y"
+                                width="350"
+                                height="350"
+                                margin_left="10"
+                                margin_right="10"
+                                margin_top="10"
+                                margin_bottom="10" />
+                            <XYAxis data={data}
+                                x_axis_variable="cibo"
+                                y_axis_variable="y"
+                                width="350"
+                                height="350"
+                                margin_left="10"
+                                margin_right="10"
+                                margin_top="10"
+                                margin_bottom="10" />
                         </Chart>
                     </div>
                 this.setState(
