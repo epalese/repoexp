@@ -15,6 +15,7 @@ let Chart = React.createClass({
 });
 
 let Bar = React.createClass({
+<<<<<<< HEAD
     getDefaultProps: function() {
         return {
           data: [],
@@ -38,6 +39,7 @@ let Bar = React.createClass({
         var width = props.width - props.margin_left - props.margin_right;
         var height = props.height - props.margin_top - props.margin_bottom;
         var data = props.data.map(function(d) {
+<<<<<<< HEAD
             return d[props.y_axis_variable];
         });
 
