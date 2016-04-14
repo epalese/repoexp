@@ -14,7 +14,7 @@ The report experience
 
 ### Run
 * while in repoexp/webapp run "npm start"
-* while in repoexp/webapp run "./start_jsonserver"
+* while in repoexp/webapp run "./start_jsonserver.sh"
 * move in repoexp/data-engine, remember to activate the virutalenv previously created and run "python ws_server.py"  
 
 Now visit localhost:8080  
