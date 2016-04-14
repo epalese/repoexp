@@ -1,6 +1,26 @@
 The report experience
 =====================
 
+## Test the app
+
+### Installation
+* Clone the repository
+* Move into repoexp/webapp and run "npm install"  
+* Move into repoexp/data-engine
+* Create a virtualenv
+* Run "pip install -r requirements.txt"
+* Download spark from http://www.apache.org/dyn/closer.lua/spark/spark-1.6.1/spark-1.6.1.tgz
+* Uncompress the tgz and move the Spark directory in repoexp/data-engine/. At the end you need to have repoexp/data-engine/spark-1.6.1 
+
+### Run
+* while in repoexp/webapp run "npm start"
+* while in repoexp/webapp run "./start_jsonserver"
+* move in repoexp/data-engine, remember to activate the virutalenv previously created and run "python ws_server.py"  
+
+Now visit localhost:8080  
+
+Ciao!  
+
 ## Install node and npm
 
 ### Manual
