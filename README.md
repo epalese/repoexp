@@ -9,8 +9,12 @@ The report experience
 * Move into repoexp/data-engine
 * Create a virtualenv
 * Run "pip install -r requirements.txt"
-* Download spark from http://www.apache.org/dyn/closer.lua/spark/spark-1.6.1/spark-1.6.1.tgz
-* Uncompress the tgz and move the Spark directory in repoexp/data-engine/. At the end you need to have repoexp/data-engine/spark-1.6.1 
+* Download spark from http://www.apache.org/dyn/closer.lua/spark/spark-1.6.1/spark-1.6.1-bin-hadoop2.4.tgz
+* Uncompress the tgz and move the Spark directory in repoexp/data-engine/.
+* Rename the directory spark-1.6.1-bin-hadoop2.4 in spark-1.6.1  
+* At the end you need to have repoexp/data-engine/spark-1.6.1 
+
+!!! You need to have a JDK installed to use Spark  
 
 ### Run
 * while in repoexp/webapp run "npm start"
