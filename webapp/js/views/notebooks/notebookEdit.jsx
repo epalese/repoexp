@@ -70,6 +70,10 @@ export default React.createClass({
                     onChange={this.titleChange}
                     placeholder="notebook title"  
                 />
+                <div id="help">
+                Select a paragraph and then press CTRL+ENTER to execute.
+                Wait to see the output in the area below the paragraph.
+                </div>
                 <div>
                     {paragraphsUI}
                 </div>

@@ -104,21 +104,20 @@ export default React.createClass({
                     //     // {x:"minestrone", y:20},
                     //     // {x:"panzerotti", y:30}
 
-                    //     {"Supplier":"STUDENT LOANS COMPANY LIMITED","Tot_Amount":1.358617829E9},
-                    //     {"Supplier":"POST OFFICE LTD","Tot_Amount":8.509302669301758E8},
-                    //     {"Supplier":"HIGHER EDUCATION FUNDING COUNCIL FOR ENGLAND","Tot_Amount":4.85789888E8},
-                    //     {"Supplier":"SKILLS FUNDING AGENCY","Tot_Amount":2.6444E8},
-                    //     {"Supplier":"ENGINEERING AND PHYSICAL SCIENCES RESEARCH COUNCIL","Tot_Amount":1.918E8},
-                    //     {"Supplier":"BIOTECHNOLOGY AND BIOLOGICAL SCIENCE RESEARCH COUNCIL","Tot_Amount":8.95E7}
+                        // {"Supplier":"STUDENT LOANS COMPANY LIMITED","Tot_Amount":1.358617829E9},
+                        // {"Supplier":"POST OFFICE LTD","Tot_Amount":8.509302669301758E8},
+                        // {"Supplier":"HIGHER EDUCATION FUNDING COUNCIL FOR ENGLAND","Tot_Amount":4.85789888E8},
+                        // {"Supplier":"SKILLS FUNDING AGENCY","Tot_Amount":2.6444E8},
+                        // {"Supplier":"ENGINEERING AND PHYSICAL SCIENCES RESEARCH COUNCIL","Tot_Amount":1.918E8},
+                        // {"Supplier":"BIOTECHNOLOGY AND BIOLOGICAL SCIENCE RESEARCH COUNCIL","Tot_Amount":8.95E7}
 
                     //     // {
                     //     //     label: 'somethingA',
                     //     //     values: [{x: 'SomethingA', y: 10}, {x: 'SomethingB', y: 4}, {x: 'SomethingC', y: 3}]
                     //     // }
-                    // ];
+                    ];
 
                     var dataSet = window[variable];
-
                     var values = dataSet.map(function(e) {
                         return {x: e[xVariableName], y: e[yVariableName]};
                     });
@@ -137,6 +136,7 @@ export default React.createClass({
                             margin={margin}
                         />
                     console.log("output = ");
+                    console.log(ReactD3);
                     console.log(BarChart);
                 }
 

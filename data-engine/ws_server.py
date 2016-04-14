@@ -49,6 +49,7 @@ def stdoutIO(stdout=None):
 code = r"""
 import requests
 import csv
+import ast
 from pyspark.sql.types import *
 
 
@@ -76,7 +77,8 @@ def downloadCSV(url, filename):
     return csv_df
 
 def dataFrameToJavaScriptVariable(df, js_var_name):
-    jsonData = df.toJSON().collect()
+    jsonStrData = df.toJSON().collect()
+    jsonData = [ast.literal_eval(i) for i in jsonStrData]
     message = {
         "varName": js_var_name,
         "jsonData":jsonData
