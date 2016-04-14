@@ -8,7 +8,8 @@ import Actions      from 'appRoot/actions';
 import Loader       from 'appRoot/components/loader';
 import marked       from 'marked';
 import NotebookStore        from 'appRoot/stores/notebooks';
-import {Chart, Bar, XYAxis} from 'appRoot/components/charts';
+// import {Chart, Bar, XYAxis} from 'appRoot/components/charts';
+import ReactD3     from 'react-d3-components';
 
 
 export default React.createClass({
@@ -85,60 +86,60 @@ export default React.createClass({
                 );
             }
             else if (this.state.paragraphs.type == 'react-chart') {
-                // var data = [
-                //     {x:100, y:10},
-                //     {x:200, y:20},
-                //     {x:300, y:30}
-                // ];
+                var parsedCode = JSON.parse(this.state.paragraphs.code);
+                console.log(parsedCode);
+                var output = undefined;
+                var type = parsedCode['type'];
+                if (type == 'barChart') {
+                    var variable = parsedCode['dataSet'];
+                    var xVariableName = parsedCode['xVariableName'];
+                    var yVariableName = parsedCode['yVariableName'];
+                    var width = parsedCode['width'];
+                    var height = parsedCode['height'];
+                    var label = parsedCode['label'];
+                    var margin = parsedCode['margin'];
 
-                var data = [
-                    {cibo:"sugo pronto", y:10},
-                    {cibo:"minestrone", y:20},
-                    {cibo:"panzerotti", y:30}
+                    // var dataSet = [
+                    //     // {x:"sugo pronto", y:10},
+                    //     // {x:"minestrone", y:20},
+                    //     // {x:"panzerotti", y:30}
 
-                    // {"Supplier":"STUDENT LOANS COMPANY LIMITED","Tot_Amount":1.358617829E9},
-                    // {"Supplier":"POST OFFICE LTD","Tot_Amount":8.509302669301758E8},
-                    // {"Supplier":"HIGHER EDUCATION FUNDING COUNCIL FOR ENGLAND","Tot_Amount":4.85789888E8},
-                    // {"Supplier":"SKILLS FUNDING AGENCY","Tot_Amount":2.6444E8},
-                    // {"Supplier":"ENGINEERING AND PHYSICAL SCIENCES RESEARCH COUNCIL","Tot_Amount":1.918E8},
-                    // {"Supplier":"BIOTECHNOLOGY AND BIOLOGICAL SCIENCE RESEARCH COUNCIL","Tot_Amount":8.95E7}
+                    //     {"Supplier":"STUDENT LOANS COMPANY LIMITED","Tot_Amount":1.358617829E9},
+                    //     {"Supplier":"POST OFFICE LTD","Tot_Amount":8.509302669301758E8},
+                    //     {"Supplier":"HIGHER EDUCATION FUNDING COUNCIL FOR ENGLAND","Tot_Amount":4.85789888E8},
+                    //     {"Supplier":"SKILLS FUNDING AGENCY","Tot_Amount":2.6444E8},
+                    //     {"Supplier":"ENGINEERING AND PHYSICAL SCIENCES RESEARCH COUNCIL","Tot_Amount":1.918E8},
+                    //     {"Supplier":"BIOTECHNOLOGY AND BIOLOGICAL SCIENCE RESEARCH COUNCIL","Tot_Amount":8.95E7}
 
-                ];
-                
+                    //     // {
+                    //     //     label: 'somethingA',
+                    //     //     values: [{x: 'SomethingA', y: 10}, {x: 'SomethingB', y: 4}, {x: 'SomethingC', y: 3}]
+                    //     // }
+                    // ];
 
-                var output =
-                    <div>
-                        <Chart width="400"
-<<<<<<< HEAD
-                                height="400">
-                            <Bar data={data}
-                                x_axis_variable="cibo"
-                                y_axis_variable="y"
-                                width="350"
-                                height="350"
-                                margin_left="10"
-                                margin_right="10"
-                                margin_top="10"
-                                margin_bottom="10" />
-                            <XYAxis data={data}
-                                x_axis_variable="cibo"
-                                y_axis_variable="y"
-                                width="350"
-                                height="350"
-                                margin_left="10"
-                                margin_right="10"
-                                margin_top="10"
-                                margin_bottom="10" />
-=======
-                               height="400">
-                          <Bar data={data}
-                              width="400"
-                              height="400" 
-                              x_axis="Supplier"
-                              y_axis="Tot_Amount" />
->>>>>>> 1c865aa3686f3840b675422def7bf5a645a4be06
-                        </Chart>
-                    </div>
+                    var dataSet = window[variable];
+
+                    var values = dataSet.map(function(e) {
+                        return {x: e[xVariableName], y: e[yVariableName]};
+                    });
+
+                    var data = [{
+                        label: label,
+                        values: values
+                    }];
+                    
+                    var BarChart = ReactD3.BarChart;
+                    output =
+                        <BarChart
+                            data={data}
+                            width={width}
+                            height={height}
+                            margin={margin}
+                        />
+                    console.log("output = ");
+                    console.log(BarChart);
+                }
+
                 this.setState(
                     update(this.state, {
                         paragraphs: { 

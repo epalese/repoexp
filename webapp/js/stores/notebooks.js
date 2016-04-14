@@ -64,7 +64,6 @@ export default Reflux.createStore({
                 if (response.type == 'sneakyMessage') {
                     console.log("SNEAKYMESSAGE");
                     console.log(response.payload.jsonData);
-                    console.log(JSON.parse(response.payload.jsonData));
                     window[response.payload.varName] = response.payload.jsonData;
                 }
                 
