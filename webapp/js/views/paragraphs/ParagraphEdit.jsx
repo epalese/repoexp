@@ -5,11 +5,14 @@ import { History }      from 'react-router';
 import update           from 'react-addons-update';
 import Reflux           from 'reflux';
 import Actions          from 'appRoot/actions';
-import NotebookStore    from 'appRoot/stores/notebooks';
+import NotebookStore    from 'appRoot/stores/NotebooksStore';
 import Loader           from 'appRoot/components/loader';
 import marked           from 'marked';
 import ReactD3          from 'react-d3-components';
 
+import Divider from 'material-ui/lib/divider';
+import TextField from 'material-ui/lib/text-field';
+import FloatingActionButton from 'material-ui/lib/floating-action-button';
 
 export default React.createClass({
     mixins: [
@@ -26,7 +29,9 @@ export default React.createClass({
     ],
 
     getInitialState: function() {
-        return {paragraphs: this.props.paragraphs};
+        return {
+            paragraphs: this.props.paragraphs
+        };
     },
 
     componentWillMount: function() {
@@ -70,7 +75,7 @@ export default React.createClass({
     },
 
     onBlur: function() {
-        console.log("onBlur");
+        // console.log("onBlur");
         this.props.updateActiveParagraph(null, null);
     },
 
@@ -86,7 +91,6 @@ export default React.createClass({
     },
 
     keyDown: function(e) {
-        e.stopPropagation();
         if (e.which == 13 & e.ctrlKey) {
             e.preventDefault();
             if (this.state.paragraphs.type == 'markdown') {
@@ -99,15 +103,15 @@ export default React.createClass({
                     })
                 );
             }
-            else if (this.state.paragraphs.type == 'react') {
-                this.setState(
-                    update(this.state, {
-                        paragraphs: { 
-                            output: { $set: this.state.paragraphs.code }
-                        }
-                    })
-                );
-            }
+            // else if (this.state.paragraphs.type == 'react') {
+            //     this.setState(
+            //         update(this.state, {
+            //             paragraphs: { 
+            //                 output: { $set: this.state.paragraphs.code }
+            //             }
+            //         })
+            //     );
+            // }
             else if (this.state.paragraphs.type == 'react-chart') {
                 var parsedCode = JSON.parse(this.state.paragraphs.code);
                 var output = undefined;
@@ -193,58 +197,95 @@ export default React.createClass({
         var p = null;
         // console.log(this.state);
         if (this.state.paragraphs.type == 'markdown') {
-            p =
-                <div className="paragraph">
-                    <div className="paragraph-title">
-                        <h2 >
-                            Paragraph {this.state.paragraphs.id}: {this.state.paragraphs.type}
-                        </h2>
-                    </div>
-                    <div className="paragraph-code">
-                        <textArea
-                            onChange={this.codeChange}
-                            onKeyDown={this.keyDown}
-                            value={this.state.paragraphs.code} >
-                        </textArea>
-                    </div>
-                    <div className="paragraph-output">
-                        <div dangerouslySetInnerHTML={this.rawMarkup(this.state.paragraphs.output)} />
-                        
-                    </div>
-                </div> 
-
-        }
-        else if (this.state.paragraphs.type == 'react') {
-            var checked_output;
-            try {
-                checked_output = eval.call(this, this.state.paragraphs.output);
-                // checked_output = eval.call(objectA, this.state.paragraph.output);
-                // var jsCode = Babel.transform(this.state.paragraphs.output);
-                // checked_output = eval(jsCode.code);
-            } catch(e) {
-                checked_output = e.toString();
-            };
             p = 
-                <div className="paragraph">
-                    <div className="paragraph-title">
-                        <h2 >
-                            Paragraph {this.state.paragraphs.id}: {this.state.paragraphs.type}
-                        </h2>
+                <div style= {{width: '95%',
+                            'marginLeft': 'auto',
+                            'marginRight': 'auto'}}>
+                    <div style={{float: 'left', marginTop: '5px'}}>
+                        <FloatingActionButton mini={true} disabled={true}>
+                            <div style={{height: '50', width: '50'}}>
+                                M
+                            </div>
+                        </FloatingActionButton>
                     </div>
-                    <div className="paragraph-code">
-                        <textArea
-                            onFocus={ this.onFocus }
-                            onBlur={ this.onBlur }
-                            onChange={this.codeChange}
-                            onKeyDown={this.keyDown}
-                            value={this.state.paragraphs.code} >
-                        </textArea>
-                    </div>
-                    <div className="paragraph-output">
-                        <div>{checked_output}</div>
+                    <TextField
+                        multiLine={true}
+                        rows={5}
+                        underlineShow={false}
+                        fullWidth={true}
+                        value={this.state.paragraphs.code}
+                        onFocus={ this.onFocus }
+                        onBlur={ this.onBlur }
+                        onChange={this.codeChange}
+                        onKeyDown={this.keyDown}
+                    />
+                    <Divider />
+                    <div className="paragraph-output"
+                        style={
+                            {
+                                'width': '90%',
+                                'marginLeft': '10px',
+                                'marginRight': 'auto',
+                                'minHeight': '10px'
+                            }
+                        }>
+                        <div dangerouslySetInnerHTML={this.rawMarkup(this.state.paragraphs.output)} />
                     </div>
                 </div>
+            // p =
+            //     <div className="paragraph">
+            //         <div className="paragraph-title">
+            //             <h2 >
+            //                 Paragraph {this.state.paragraphs.id}: {this.state.paragraphs.type}
+            //             </h2>
+            //         </div>
+            //         <div className="paragraph-code">
+            //             <textArea
+            //                 onFocus={ this.onFocus }
+            //                 onBlur={ this.onBlur }
+            //                 onChange={this.codeChange}
+            //                 onKeyDown={this.keyDown}
+            //                 value={this.state.paragraphs.code} >
+            //             </textArea>
+            //         </div>
+            //         <div className="paragraph-output">
+            //             <div dangerouslySetInnerHTML={this.rawMarkup(this.state.paragraphs.output)} />
+                        
+            //         </div>
+            //     </div> 
+
         }
+        // else if (this.state.paragraphs.type == 'react') {
+        //     var checked_output;
+        //     try {
+        //         checked_output = eval.call(this, this.state.paragraphs.output);
+        //         // checked_output = eval.call(objectA, this.state.paragraph.output);
+        //         // var jsCode = Babel.transform(this.state.paragraphs.output);
+        //         // checked_output = eval(jsCode.code);
+        //     } catch(e) {
+        //         checked_output = e.toString();
+        //     };
+        //     p = 
+        //         <div className="paragraph">
+        //             <div className="paragraph-title">
+        //                 <h2 >
+        //                     Paragraph {this.state.paragraphs.id}: {this.state.paragraphs.type}
+        //                 </h2>
+        //             </div>
+        //             <div className="paragraph-code">
+        //                 <textArea
+        //                     onFocus={ this.onFocus }
+        //                     onBlur={ this.onBlur }
+        //                     onChange={this.codeChange}
+        //                     onKeyDown={this.keyDown}
+        //                     value={this.state.paragraphs.code} >
+        //                 </textArea>
+        //             </div>
+        //             <div className="paragraph-output">
+        //                 <div>{checked_output}</div>
+        //             </div>
+        //         </div>
+        // }
         else if (this.state.paragraphs.type == 'react-chart') {
             // var checked_output;
             // try {
@@ -255,49 +296,117 @@ export default React.createClass({
             // } catch(e) {
             //     checked_output = e.toString();
             // };
-            console.log(this.state.paragraphs.output);
             p = 
-                <div className="paragraph">
-                    <div className="paragraph-title">
-                        <h2 >
-                            Paragraph {this.state.paragraphs.id}: {this.state.paragraphs.type}
-                        </h2>
+                <div style= {{width: '95%',
+                            'marginLeft': 'auto',
+                            'marginRight': 'auto'}}>
+                    <div style={{float: 'left', marginTop: '5px'}}>
+                        <FloatingActionButton mini={true} disabled={true}>
+                            <div style={{height: '50', width: '50'}}>
+                                R
+                            </div>
+                        </FloatingActionButton>
                     </div>
-                    <div className="paragraph-code">
-                        <textArea
-                            onFocus={ this.onFocus }
-                            onBlur={ this.onBlur }
-                            onChange={this.codeChange}
-                            onKeyDown={this.keyDown}
-                            value={this.state.paragraphs.code} >
-                        </textArea>
-                    </div>
-                    <div className="paragraph-output">
+                    <TextField
+                        multiLine={true}
+                        rows={5}
+                        underlineShow={false}
+                        fullWidth={true}
+                        value={this.state.paragraphs.code}
+                        onFocus={ this.onFocus }
+                        onBlur={ this.onBlur }
+                        onChange={this.codeChange}
+                        onKeyDown={this.keyDown}
+                    />
+                    <Divider />
+                    <div className="paragraph-output"
+                        style={
+                            {
+                                'width': '90%',
+                                'marginLeft': '10px',
+                                'marginRight': 'auto',
+                                'minHeight': '10px'
+                            }
+                        }>
                         <div>{this.state.paragraphs.output}</div>
                     </div>
                 </div>
+            // p = 
+            //     <div className="paragraph">
+            //         <div className="paragraph-title">
+            //             <h2 >
+            //                 Paragraph {this.state.paragraphs.id}: {this.state.paragraphs.type}
+            //             </h2>
+            //         </div>
+            //         <div className="paragraph-code">
+            //             <textArea
+            //                 onFocus={ this.onFocus }
+            //                 onBlur={ this.onBlur }
+            //                 onChange={this.codeChange}
+            //                 onKeyDown={this.keyDown}
+            //                 value={this.state.paragraphs.code} >
+            //             </textArea>
+            //         </div>
+            //         <div className="paragraph-output">
+            //             <div>{this.state.paragraphs.output}</div>
+            //         </div>
+            //     </div>
         }
         else if (this.state.paragraphs.type == 'code') {
-            p =
-                <div className="paragraph">
-                    <div className="paragraph-title">
-                        <h2 >
-                            Paragraph {this.state.paragraphs.id}: {this.state.paragraphs.type}
-                        </h2>
+            p = 
+                <div style= {{width: '95%',
+                            'marginLeft': 'auto',
+                            'marginRight': 'auto'}}>
+                    <div style={{float: 'left', marginTop: '5px'}}>
+                        <FloatingActionButton mini={true} disabled={true}>
+                            <div style={{height: '50', width: '50'}}>
+                                C
+                            </div>
+                        </FloatingActionButton>
                     </div>
-                    <div className="paragraph-code">
-                        <textArea
-                            onFocus={ this.onFocus }
-                            onBlur={ this.onBlur }
-                            onChange={this.codeChange}
-                            onKeyDown={this.keyDown}
-                            value={this.state.paragraphs.code} >
-                        </textArea>
-                    </div>
-                    <div className="paragraph-output">
+                    <TextField
+                        multiLine={true}
+                        rows={5}
+                        underlineShow={false}
+                        fullWidth={true}
+                        value={this.state.paragraphs.code}
+                        onFocus={ this.onFocus }
+                        onBlur={ this.onBlur }
+                        onChange={this.codeChange}
+                        onKeyDown={this.keyDown}
+                    />
+                    <Divider />
+                    <div className="paragraph-output"
+                        style={
+                            {
+                                'width': '90%',
+                                'marginLeft': '10px',
+                                'marginRight': 'auto',
+                                'minHeight': '10px'
+                            }
+                        }>
                         <div dangerouslySetInnerHTML={this.rawMarkup(this.state.paragraphs.output)} />
                     </div>
-                </div> 
+                </div>
+            // p = <div className="paragraph">
+            //         <div className="paragraph-title">
+            //             <h2 >
+            //                 Paragraph {this.state.paragraphs.id}: {this.state.paragraphs.type}
+            //             </h2>
+            //         </div>
+            //         <div className="paragraph-code">
+            //             <textArea
+            //                 onFocus={ this.onFocus }
+            //                 onBlur={ this.onBlur }
+            //                 onChange={this.codeChange}
+            //                 onKeyDown={this.keyDown}
+            //                 value={this.state.paragraphs.code} >
+            //             </textArea>
+            //         </div>
+            //         <div className="paragraph-output">
+            //             <div dangerouslySetInnerHTML={this.rawMarkup(this.state.paragraphs.output)} />
+            //         </div>
+            //     </div> 
         }
         return p;
     }

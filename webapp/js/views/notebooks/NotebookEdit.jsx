@@ -10,6 +10,13 @@ import Loader       from 'appRoot/components/loader';
 import BasicInput   from 'appRoot/components/basicInput';
 import ParagraphEdit from 'appRoot/views/paragraphs/ParagraphEdit';
 
+import Paper from 'material-ui/lib/paper';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
+import TextField from 'material-ui/lib/text-field';
+import FloatingActionButton from 'material-ui/lib/floating-action-button';
+import ContentSave from 'material-ui/lib/svg-icons/content/save';
+
 
 export default React.createClass({
     mixins: [Reflux.ListenerMixin],
@@ -170,42 +177,122 @@ export default React.createClass({
     titleChange: function (e) {
         this.setState(update(this.state, {
             notebook: { 
-                title: { $set: e.target.value }
+                name: { $set: e.target.value }
             }
         }));
     },
     
     render: function () {
+        const styles = {
+            paperTitleStyle: {
+                width: '80%',
+                'marginLeft': 'auto',
+                'marginRight': 'auto',
+                'marginTop': '100px'
+            },
+            paperParagraphStyle: {
+                width: '80%',
+                'marginLeft': 'auto',
+                'marginRight': 'auto',
+                'marginTop': '10px'
+            },
+            title: {
+                background: "none",
+                border: "none",
+                height: "100%",
+                width: "70%",
+                fontSize: "20px"
+            },
+            button: {
+                marginTop: 7,
+                marginRight: 20,
+            }
+        };
+
         var paragraphsUI = this.state.notebook.paragraphs ?
             this.state.notebook.paragraphs.map(
                 function (paragraph) {
                     return (
-                        <ParagraphEdit
-                            key={paragraph.id}
-                            notebookId={this.state.notebook.id}
-                            paragraphId={paragraph.id}
-                            paragraphs={paragraph}
-                            updateParagraphCode={this.updateParagraphCode}
-                            updateActiveParagraph={this.updateActiveParagraph}  />);
+                        <Paper key={paragraph.id} style={styles.paperParagraphStyle}  rounded={false}>
+                            <ParagraphEdit
+                                key={paragraph.id}
+                                notebookId={this.state.notebook.id}
+                                paragraphId={paragraph.id}
+                                paragraphs={paragraph}
+                                updateParagraphCode={this.updateParagraphCode}
+                                updateActiveParagraph={this.updateActiveParagraph}  />
+                        </Paper>);
                 }.bind(this))
             : [];
+        
         return (
             <div>
-                <BasicInput
-                    type="text"
-                    ref="title"
-                    name="title"
-                    value={this.state.notebook.name}
-                    error={this.state.validity.name}
-                    onChange={this.titleChange}
-                    placeholder="notebook title" />
-                <div id="help">
-                Select a paragraph and then press CTRL+ENTER to execute.
-                Wait to see the output in the area below the paragraph.
-                </div>
-                <div>
-                    {paragraphsUI}
-                </div>
+                <Paper style={styles.paperTitleStyle}  rounded={false}>
+                    <Toolbar>
+                        <input
+                            type="text"
+                            style={styles.title}
+                            value={this.state.notebook.name}
+                            onChange={this.titleChange} />
+                        <ToolbarGroup float="right">
+                            <FloatingActionButton
+                                mini={true}
+                                secondary={true}
+                                style={styles.button}>
+                                <div style={{height: '50', width: '50'}}>
+                                    C
+                                </div>
+                            </FloatingActionButton>
+                            <FloatingActionButton
+                                mini={true}
+                                secondary={true}
+                                style={styles.button}>
+                                <div style={{height: '50', width: '50'}}>
+                                    M
+                                </div>
+                            </FloatingActionButton>
+                            <FloatingActionButton
+                                mini={true}
+                                secondary={true}
+                                style={styles.button}>
+                                <div style={{height: '50', width: '50'}}>
+                                    R
+                                </div>
+                            </FloatingActionButton>
+                            <FloatingActionButton
+                                mini={true}
+                                secondary={true}
+                                style={styles.button}>
+                                <ContentSave />
+                            </FloatingActionButton>
+                        </ToolbarGroup>
+                    </Toolbar>
+                </Paper>
+                
+                <Paper style={styles.paperParagraphStyle}  rounded={false}>
+                    <div id="help"
+                        style={
+                            {width: '95%',
+                            'marginLeft': 'auto',
+                            'marginRight': 'auto',
+                            'marginTop': '20px',
+                            'marginBottom': '20px',
+                            'color': 'grey'
+                        }}>
+                        <br/>
+                        Help<br/>
+                        Select a paragraph and then press CTRL+ENTER to execute.
+                        Wait to see the output in the area below the paragraph.
+                        <br/>
+                        CTRL+C: add a new 'code' paragraph at the end or after the selected paragraph<br/>
+                        CTRL+M: add a new 'markdown' paragraph at the end or after the selected paragraph<br/>
+                        CTRL+R: add a new 'react' paragraph at the end or after the selected paragraph<br/>
+                        CTRL+S: save the notebook<br/>
+                        <br/>
+                    </div>
+                </Paper>
+                
+                {paragraphsUI}
             </div>
         );
     }

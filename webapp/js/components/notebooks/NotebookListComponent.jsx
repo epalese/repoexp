@@ -2,13 +2,13 @@
 
 import React            from 'react';
 import Reflux           from 'reflux';
-import NotebookStore    from 'appRoot/stores/notebooks';
+import NotebooksStore    from 'appRoot/stores/NotebooksStore';
 import NotebookItem     from 'appRoot/views/notebooks/NotebookListItem';
 
 
 export default React.createClass({
     mixins: [
-        Reflux.connect(NotebookStore, 'notebooks')
+        Reflux.connect(NotebooksStore, 'notebooks')
     ],
     
     render: function () {

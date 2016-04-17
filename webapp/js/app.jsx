@@ -6,19 +6,20 @@ import AppHeader        from 'appRoot/views/appHeader';
 import Login            from 'appRoot/views/login';
 import NotebookList     from 'appRoot/views/notebooks/NotebookList';
 import NotebookEdit     from 'appRoot/views/notebooks/NotebookEdit';
-import AuthStore        from 'appRoot/stores/authStore';
+import AuthStore        from 'appRoot/stores/AuthStore';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+console.log("[app] Starting...");
+injectTapEventPlugin();
 
 let AppLayout = React.createClass({
 render: function () {
-    console.log("app.jsx");
     return (
-      <div className="app-container">
-        <AppHeader />
-        <main>
-            <div>
-                {this.props.children}
-            </div>
-        </main>
+      <div >
+        <AppHeader/>
+        <div style={{'marginTop': '100px'}}>
+            {this.props.children}
+        </div>
       </div>
     );
   }

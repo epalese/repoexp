@@ -45,7 +45,7 @@ export default Reflux.createStore({
         }
         if (this.sock) {
             this.sock.onopen = function() {
-                console.log("Connected to " + wsuri);
+                console.log("[NotebooksStore] initWS: Connected to " + wsuri);
             };
             this.sock.onclose = function(e) {
                 console.log("Connection closed (wasClean = " + 
@@ -92,7 +92,7 @@ export default Reflux.createStore({
                 if (res.ok) {
                     if (res.body.length > 0) {
                         Actions.getNotebook.completed(res.body[0]);
-                        console.log(`onGetNotebook: res.ok = ${res.body[0]}`);
+                        // console.log(`onGetNotebook: res.ok = ${res.body[0]}`);
                         // this.paragraphs = res.body[0].paragraphs;
                         // this.trigger(this.paragraphs);
                     } else {

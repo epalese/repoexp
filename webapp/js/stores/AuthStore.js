@@ -15,7 +15,7 @@ export default Reflux.createStore({
     listenables: Actions,
 
     init: function() {
-        console.log("authStore init");
+        console.log("[AuthStore] init");
         this.jwt = localStorage.getItem('jwt');
         this.claims = this.parseJwt();
         this.error = false;
@@ -42,7 +42,7 @@ export default Reflux.createStore({
         this.trigger(this.getState());
     },
     onLogin (email, password) {
-        console.log(`authStore.onLogin: ${email}, ${password}`);
+        console.log(`AuthStore.onLogin: ${email}, ${password}`);
         this.loading = true;
         this.changed();
 
