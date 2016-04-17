@@ -2,15 +2,14 @@
 
 import React      from 'react';
 import { Link }   from 'react-router';
-import NotebookList   from 'appRoot/components/notebooks/list';
+import NotebookListComponent   from 'appRoot/components/notebooks/NotebookListComponent';
  
 export default React.createClass({
    render: function () {
-        console.log("views.notebooks.list.render");
         return (
             <div>
                 <div className="notebook-list-view">
-                    <NotebookList />
+                    <NotebookListComponent />
                 </div>
             </div>
         );

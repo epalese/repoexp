@@ -1,47 +1,84 @@
-import React       from 'react';
-import { History } from 'react-router';
-import BasicInput  from 'appRoot/components/basicInput';
-import Actions     from 'appRoot/actions';
+import React        from 'react';
+import Reflux       from 'reflux';
+import Router, { browserHistory } from 'react-router';
+import Actions      from 'appRoot/actions';
+import AuthStore    from 'appRoot/stores/authStore';
 
 export default React.createClass({
-	mixins: [
-		History
-	],
-	getInitialState: function () { return {}; },
-	logIn: function (e) {
-		var detail = {};
+  mixins: [
+    Reflux.ListenerMixin
+  ],
+  contextTypes: {
+    router: React.PropTypes.object.isRequired
+  },
 
-		Array.prototype.forEach.call(
-			e.target.querySelectorAll('input'),
-			function (v) {
-				detail[v.getAttribute('name')] = v.value;
-			});
-		e.preventDefault(); 
-		e.stopPropagation(); 
+  getInitialState() {
+    return {
+      loggedIn: false
+    }
+  },
 
-		Actions.login(detail.username, detail.password)
-			.then(function () {
-				//console.log("SUCCESS", arguments);
-				this.history.pushState('', '/');
-			}.bind(this))
-			['catch'](function () {
-				//console.log("ERROR", arguments);
-				this.setState({'loginError': 'bad username or password'});
-			}.bind(this))
-			;
-	},
-	render: function () {
-		return (
-			<form className="login-form" onSubmit={this.logIn}>
-				<fieldset>
-					<legend>Log In</legend>
-					<BasicInput name="username" type="text" placeholder="username" />
-					<BasicInput name="password" type="password" placeholder="password" />
-					{ this.state.loginError && <aside className="error">{this.state.loginError}</aside> }
-					<button type="submit">Log In</button>
-				</fieldset>
-			</form>
-		);
-	}
+  componentWillMount () {
+    var loggedIn = AuthStore.loggedIn();
+    console.log("login.componentWillMount loggedIn = " + loggedIn);
+    if(loggedIn) {
+        this.context.router.replace('/')
+    }
+  },
+
+  componentDidMount () {
+    this.listenTo(AuthStore, this.onAuthChange);
+  },
+
+  onAuthChange(auth) {
+    console.log("login.onAuthChange = " + auth);
+    this.setState(auth);
+
+    if(this.state.loggedIn) {
+      const { location } = this.props
+      if (location.state && location.state.nextPathname) {
+        this.context.router.replace(location.state.nextPathname)
+      } else {
+        this.context.router.replace('/')
+      }
+    }
+    else {
+      return this.setState({ loggedIn: false });
+    }
+  },
+
+  handleSubmit(event) {
+    event.preventDefault()
+
+    const email = this.refs.email.value
+    const pass = this.refs.pass.value
+
+    Actions.login(email, pass);
+    // , (loggedIn) => {
+    //   if (!loggedIn)
+    //     return this.setState({ error: true })
+
+    //   const { location } = this.props
+
+    //   if (location.state && location.state.nextPathname) {
+    //     this.context.router.replace(location.state.nextPathname)
+    //   } else {
+    //     this.context.router.replace('/')
+    //   }
+    // })
+  },
+
+  render() {
+    console.log("login: this.state.loggedIn = " + this.state.loggedIn);
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label><input ref="email" placeholder="email" defaultValue="user" /></label>
+        <label><input ref="pass" placeholder="password" /></label> (hint: user)<br />
+        <button type="submit">login</button>
+        {!this.state.loggedIn && (
+          <p>Bad login information</p>
+        )}
+      </form>
+    )
+  }
 });
-

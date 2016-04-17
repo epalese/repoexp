@@ -1,12 +1,12 @@
 import React          from 'react';
 import ReactDom       from 'react-dom';
 import { Router, Route, Link, hashHistory } from 'react-router'
-import CSS            from '../css/app.less';
-import AppHeader      from 'appRoot/views/appHeader';
-import NotebookList   from 'appRoot/views/notebooks/list';
-import NotebookEdit   from 'appRoot/views/notebooks/notebookEdit';
-
-window.React = React;
+import CSS              from '../css/app.less';
+import AppHeader        from 'appRoot/views/appHeader';
+import Login            from 'appRoot/views/login';
+import NotebookList     from 'appRoot/views/notebooks/NotebookList';
+import NotebookEdit     from 'appRoot/views/notebooks/NotebookEdit';
+import AuthStore        from 'appRoot/stores/authStore';
 
 let AppLayout = React.createClass({
 render: function () {
@@ -24,27 +24,21 @@ render: function () {
   }
 });
 
-// <h1>App</h1>
-// <ul>
-//   <li><Link to="/notebooks">Notebooks</Link></li>
-// </ul>
-
-// ReactDom.render((
-//   <Router history={browserHistory}>
-//     <Route path="/" component={AppLayout}>
-//       <Route path="notebooks" component={NotebookList} />
-//       <Route path="inbox" component={Inbox}>
-//         <Route path="messages/:id" component={Message} />
-//       </Route>
-//     </Route>
-//   </Router>
-// ), document.getElementById('app'))
+function requireAuth(nextState, replace) {
+  if (!AuthStore.loggedIn()) {
+    replace({
+      pathname: '/login',
+      state: { nextPathname: nextState.location.pathname }
+    })
+  }
+};
 
 let routes = (
     <Route path="/" component={AppLayout}>
-        <Route path="notebooks" component={NotebookList} />
-        <Route path="/notebooks/create" component={ NotebookEdit } />
-        <Route path="/notebooks/:notebookId/edit" component={ NotebookEdit } />
+        <Route path="/login" component={Login} />
+        <Route path="notebooks" component={NotebookList} onEnter={requireAuth} />
+        <Route path="/notebooks/create" component={ NotebookEdit } onEnter={requireAuth} />
+        <Route path="/notebooks/:notebookId/edit" component={ NotebookEdit } onEnter={requireAuth} />
     </Route>
 );
 

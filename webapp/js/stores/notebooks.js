@@ -76,15 +76,12 @@ export default Reflux.createStore({
             requestId: this.requestId++,
             payload: msg
         }
-        // console.log(`[stores.notebooks.onSendMsgWS] paragraph id = ${paragraph_id} req = `);
-        // console.log(req);
         if (this.sock) {
             var strReq = JSON.stringify(req);
             this.sock.send(strReq);
             console.log("[stores.notebooks.onSendMsgWS] Sent msg : " + strReq);
             Actions.sendMsgWS.completed(paragraph_id, msg);
         } else {
-            console.log("[stores.notebooks.onSendMsgWS] socket not initialised");
             Actions.sendMsgWS.failed('Socket not found');
         }
     },
@@ -109,8 +106,9 @@ export default Reflux.createStore({
         req.bind(this)();
         // Config.loadTimeSimMs ? setTimeout(req.bind(this), Config.loadTimeSimMs) : req();
     },
-    onModifyNotebook: function (notebook, id) {
-        console.log("onModifyNotebook: notebook = " + notebook);
+    onSaveNotebook: function (notebook, id) {
+        console.log("onSaveNotebook: notebook = ");
+        console.log(notebook);
         console.log("onModifyNotebook: id = " + id);
         console.log("onModifyNotebook: endpoint = " + id ? this.endpoint+'/'+id : this.endpoint);
         function req () {
@@ -122,20 +120,20 @@ export default Reflux.createStore({
                 console.log("onModifyNotebook: res = " + res);
                 if (res.ok) {
                     console.log("onModifyNotebook: action ended correctly " + res.body.id);
-                    Actions.modifyNotebook.completed(res);
+                    Actions.saveNotebook.completed(res);
                     // if there's already a Notebook in our local store we need to modify it
                     // if not, add this one
                     var existingNotebookIdx = Array.findIndex(this.notebooks, function (notebook) {
                         return res.body.id == notebook.id;
                     });
                     if (existingNotebookIdx > -1) {
-                        this.posts[existingNotebookIdx] = res.body;
+                        this.notebooks[existingNotebookIdx] = res.body;
                     } else {
                         this.notebooks.push(res.body);
                     }
                 } else {
                     console.log("onModifyNotebook: action ended wrongly " + res.body);
-                    Actions.modifyNotebook.completed();
+                    Actions.modifyNotebook.failed(err);
                 }
             }.bind(this));
         }

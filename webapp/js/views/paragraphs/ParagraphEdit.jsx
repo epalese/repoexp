@@ -1,25 +1,34 @@
 "use strict";
 
-import React        from 'react';
-import { History }  from 'react-router';
-import update       from 'react-addons-update';
-import Reflux       from 'reflux';
-import Actions      from 'appRoot/actions';
-import Loader       from 'appRoot/components/loader';
-import marked       from 'marked';
-import NotebookStore        from 'appRoot/stores/notebooks';
-// import {Chart, Bar, XYAxis} from 'appRoot/components/charts';
-import ReactD3     from 'react-d3-components';
+import React            from 'react';
+import { History }      from 'react-router';
+import update           from 'react-addons-update';
+import Reflux           from 'reflux';
+import Actions          from 'appRoot/actions';
+import NotebookStore    from 'appRoot/stores/notebooks';
+import Loader           from 'appRoot/components/loader';
+import marked           from 'marked';
+import ReactD3          from 'react-d3-components';
 
 
 export default React.createClass({
     mixins: [
         Reflux.ListenerMixin
+        // Reflux.connectFilter(NotebookStore, "paragraphs", function(notebooks) {
+        //     var notebook = notebooks.filter(function(notebook) {
+        //         return notebook.id === this.props.notebookId;
+        //     }.bind(this))[0];
+        //     var paragraph = notebook.paragraphs.filter(function(paragraph) {
+        //         return paragraph.id === this.props.paragraphId;
+        //     }.bind(this))[0];
+        //     return paragraph;
+        // })
     ],
 
     getInitialState: function() {
         return {paragraphs: this.props.paragraphs};
     },
+
     componentWillMount: function() {
         this.listenTo(Actions.sendMsgWS.completed, function(paragraphId, msg) {
             if (paragraphId == this.state.paragraphs.id) {
@@ -54,6 +63,17 @@ export default React.createClass({
             this.setState({paragraphs: p});
         }
     },
+
+    onFocus: function() {
+        // console.log("onFocus");
+        this.props.updateActiveParagraph(this.state.paragraphs.id, this.state.paragraphs.order);
+    },
+
+    onBlur: function() {
+        console.log("onBlur");
+        this.props.updateActiveParagraph(null, null);
+    },
+
     codeChange: function(e) {
         this.setState(
             update(this.state, {
@@ -62,8 +82,11 @@ export default React.createClass({
                 }
             })
         );
+        this.props.updateParagraphCode(this.props.paragraphId, e.target.value);
     },
+
     keyDown: function(e) {
+        e.stopPropagation();
         if (e.which == 13 & e.ctrlKey) {
             e.preventDefault();
             if (this.state.paragraphs.type == 'markdown') {
@@ -87,7 +110,6 @@ export default React.createClass({
             }
             else if (this.state.paragraphs.type == 'react-chart') {
                 var parsedCode = JSON.parse(this.state.paragraphs.code);
-                console.log(parsedCode);
                 var output = undefined;
                 var type = parsedCode['type'];
                 if (type == 'barChart') {
@@ -158,6 +180,7 @@ export default React.createClass({
             }
         }
     },
+
     rawMarkup: function(html) {
         var rawMarkup = marked(
             html,
@@ -165,6 +188,7 @@ export default React.createClass({
             );
         return {__html: rawMarkup};
     },
+
     render: function() {
         var p = null;
         // console.log(this.state);
@@ -209,6 +233,8 @@ export default React.createClass({
                     </div>
                     <div className="paragraph-code">
                         <textArea
+                            onFocus={ this.onFocus }
+                            onBlur={ this.onBlur }
                             onChange={this.codeChange}
                             onKeyDown={this.keyDown}
                             value={this.state.paragraphs.code} >
@@ -239,6 +265,8 @@ export default React.createClass({
                     </div>
                     <div className="paragraph-code">
                         <textArea
+                            onFocus={ this.onFocus }
+                            onBlur={ this.onBlur }
                             onChange={this.codeChange}
                             onKeyDown={this.keyDown}
                             value={this.state.paragraphs.code} >
@@ -259,6 +287,8 @@ export default React.createClass({
                     </div>
                     <div className="paragraph-code">
                         <textArea
+                            onFocus={ this.onFocus }
+                            onBlur={ this.onBlur }
                             onChange={this.codeChange}
                             onKeyDown={this.keyDown}
                             value={this.state.paragraphs.code} >
@@ -269,7 +299,6 @@ export default React.createClass({
                     </div>
                 </div> 
         }
-
         return p;
     }
 });

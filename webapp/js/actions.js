@@ -3,10 +3,14 @@
 import Reflux from 'reflux';
 
 export default Reflux.createActions({
+    'login': {
+        children: ['completed', 'failed']
+    },
+    'logout': {},
     'getNotebook': {
         asyncResult: true
     },
-    'modifyNotebook': {
+    'saveNotebook': {
         asyncResult: true
     },
     'sendMsgWS': {
