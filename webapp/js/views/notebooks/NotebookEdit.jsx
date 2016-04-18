@@ -104,23 +104,36 @@ export default React.createClass({
             // If outside of any paragraph: append at the end if focus is on nothing
             if (this.state.activeParagraphId == null || 
                 this.state.activeParagraphId == undefined) {
-                var maxOrder = 1 + Math.max.apply(Math, this.state.notebook.paragraphs.map(
-                    function(p){
-                        return p.order;
-                    })
-                );
+                var newOrder = 0
                 var newParagraph = {
                   output: "",
                   code: "",
                   type: type,
                   "id": maxId.toString(),
-                  "order": maxOrder
+                  "order": newOrder
                 }
+                var paragraphs = this.state.notebook.paragraphs;
+                paragraphs.forEach(function(paragraph, index, array) {
+                    paragraph.order = paragraph.order + 1;
+                });
+                paragraphs.splice(newOrder, 0, newParagraph);
                 this.setState(update(this.state, {
                     notebook: { 
                         paragraphs: { $push: [newParagraph] }
                     }
                 }));
+                // var newParagraph = {
+                //   output: "",
+                //   code: "",
+                //   type: type,
+                //   "id": maxId.toString(),
+                //   "order": maxOrder
+                // }
+                // this.setState(update(this.state, {
+                //     notebook: { 
+                //         paragraphs: { $push: [newParagraph] }
+                //     }
+                // }));
             }
             // If inside a paragraph: append just after it
             else if (this.state.activeParagraphId != null && 
@@ -284,9 +297,9 @@ export default React.createClass({
                         Select a paragraph and then press CTRL+ENTER to execute.
                         Wait to see the output in the area below the paragraph.
                         <br/>
-                        CTRL+C: add a new 'code' paragraph at the end or after the selected paragraph<br/>
-                        CTRL+M: add a new 'markdown' paragraph at the end or after the selected paragraph<br/>
-                        CTRL+R: add a new 'react' paragraph at the end or after the selected paragraph<br/>
+                        CTRL+C: add a new 'code' paragraph at the beginning or after the selected paragraph<br/>
+                        CTRL+M: add a new 'markdown' paragraph at the beginning or after the selected paragraph<br/>
+                        CTRL+R: add a new 'react' paragraph at the beginning or after the selected paragraph<br/>
                         CTRL+S: save the notebook<br/>
                         <br/>
                     </div>
