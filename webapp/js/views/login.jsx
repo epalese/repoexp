@@ -158,7 +158,3 @@ export default React.createClass({
     )
   }
 });
-// <form onSubmit={this.handleSubmit}>
-// <label><input ref="email" placeholder="email" defaultValue="user" /></label>
-// <label><input ref="pass" placeholder="password" /></label> (hint: user)<br />
-// </form>

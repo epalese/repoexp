@@ -119,21 +119,9 @@ export default React.createClass({
                 paragraphs.splice(newOrder, 0, newParagraph);
                 this.setState(update(this.state, {
                     notebook: { 
-                        paragraphs: { $push: [newParagraph] }
+                        paragraphs: { $set: paragraphs }
                     }
                 }));
-                // var newParagraph = {
-                //   output: "",
-                //   code: "",
-                //   type: type,
-                //   "id": maxId.toString(),
-                //   "order": maxOrder
-                // }
-                // this.setState(update(this.state, {
-                //     notebook: { 
-                //         paragraphs: { $push: [newParagraph] }
-                //     }
-                // }));
             }
             // If inside a paragraph: append just after it
             else if (this.state.activeParagraphId != null && 
@@ -231,7 +219,7 @@ export default React.createClass({
                                 key={paragraph.id}
                                 notebookId={this.state.notebook.id}
                                 paragraphId={paragraph.id}
-                                paragraphs={paragraph}
+                                paragraph={paragraph}
                                 updateParagraphCode={this.updateParagraphCode}
                                 updateActiveParagraph={this.updateActiveParagraph}  />
                         </Paper>);

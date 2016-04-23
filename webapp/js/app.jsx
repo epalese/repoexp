@@ -3,11 +3,13 @@ import ReactDom       from 'react-dom';
 import { Router, Route, Link, hashHistory } from 'react-router'
 import CSS              from '../css/app.less';
 import AppHeader        from 'appRoot/views/appHeader';
+import AuthStore        from 'appRoot/stores/AuthStore';
 import Login            from 'appRoot/views/login';
 import NotebookList     from 'appRoot/views/notebooks/NotebookList';
 import NotebookEdit     from 'appRoot/views/notebooks/NotebookEdit';
-import AuthStore        from 'appRoot/stores/AuthStore';
-import injectTapEventPlugin from 'react-tap-event-plugin';
+import MyEditor           from 'appRoot/views/editor/Editor';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';    // needed for material ui
 
 console.log("[app] Starting...");
 injectTapEventPlugin();
@@ -37,7 +39,8 @@ function requireAuth(nextState, replace) {
 let routes = (
     <Route path="/" component={AppLayout}>
         <Route path="/login" component={Login} />
-        <Route path="notebooks" component={NotebookList} onEnter={requireAuth} />
+        <Route path="/editor" component={ MyEditor } />
+        <Route path="/notebooks" component={NotebookList} onEnter={requireAuth} />
         <Route path="/notebooks/create" component={ NotebookEdit } onEnter={requireAuth} />
         <Route path="/notebooks/:notebookId/edit" component={ NotebookEdit } onEnter={requireAuth} />
     </Route>
