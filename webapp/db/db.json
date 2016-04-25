@@ -17,64 +17,88 @@
       "user": 1,
       "date": 1457995680565,
       "id": 1,
-      "paragraphs": [
-        {
-          "output": "",
-          "code": "Test\n===",
-          "type": "markdown",
-          "id": "7",
-          "order": 0
+      "content": {
+        "entityMap": {
+          "0": {
+            "type": "TOKEN",
+            "mutability": "IMMUTABLE",
+            "data": {
+              "type": "code",
+              "visible": true,
+              "content": "SASASAAS",
+              "output": "test test test"
+            }
+          }
         },
-        {
-          "output": "",
-          "code": "df = downloadCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')\ndf.show()\n",
-          "type": "code",
-          "id": "0",
-          "order": 1
-        },
-        {
-          "output": "",
-          "code": "df2 = df.withColumn(\"Amount\", df.Amount.cast(\"float\"))\ndf2.printSchema()\ndf2.show()\n\ndf3 = sqlContext.sql(\"SELECT Supplier, SUM(CAST(Amount AS FLOAT)) as Tot_Amount FROM test_csv GROUP BY Supplier ORDER BY SUM(CAST(Amount AS FLOAT)) DESC LIMIT 5\")\ndf3.printSchema()\ndf3.show()\n",
-          "type": "code",
-          "id": "1",
-          "order": 2
-        },
-        {
-          "output": "",
-          "code": "dataFrameToJavaScriptVariable(df3, \"myvar\")",
-          "type": "code",
-          "id": "2",
-          "order": 3
-        },
-        {
-          "output": "This is **another** comment",
-          "code": "This is **another** comment.  \nCiao",
-          "type": "markdown",
-          "id": "3",
-          "order": 4
-        },
-        {
-          "output": "",
-          "code": "{\n\"type\": \"barChart\",\n\"dataSet\": \"myvar\",\n\"xVariableName\": \"Supplier\",\n\"yVariableName\": \"Tot_Amount\",\n\"width\": 500,\n\"height\": 300,\n\"label\": \"Sucammela\",\n\"margin\": {\"top\": 10, \"bottom\": 50, \"left\": 50, \"right\": 10}\n}",
-          "type": "react-chart",
-          "id": "4",
-          "order": 5
-        },
-        {
-          "output": "",
-          "code": "",
-          "type": "code",
-          "id": "5",
-          "order": 6
-        },
-        {
-          "output": "",
-          "code": "",
-          "type": "markdown",
-          "id": "6",
-          "order": 7
-        }
-      ]
+        "blocks": [
+          {
+            "key": "avnq5",
+            "text": "This is a Draft-based editor that supports TeX rendering.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "1u19e",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "78t4s",
+            "text": "Each TeX block below is represented as a DraftEntity object and rendered using Khan Academy's KaTeX library.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "ef3mn",
+            "text": "SAVEEE",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 0,
+                "length": 6,
+                "style": "BOLD"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "eqet",
+            "text": " ",
+            "type": "atomic",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": [
+              {
+                "offset": 0,
+                "length": 1,
+                "key": 0
+              }
+            ]
+          },
+          {
+            "key": "f0q5r",
+            "text": "EEEE",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 0,
+                "length": 4,
+                "style": "UNDERLINE"
+              }
+            ],
+            "entityRanges": []
+          }
+        ]
+      }
     }
   ]
 }

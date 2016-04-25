@@ -14,6 +14,7 @@ module.exports = {
         libraryTarget: "var",
         library: ["tool"]
     },
+    devtool: 'eval-source-map',
 	plugins: [
 		new webpack.HotModuleReplacementPlugin(),
 		new webpack.NoErrorsPlugin(),

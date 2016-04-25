@@ -1,77 +1,234 @@
+'use strict';
+
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Editor, EditorState, RichUtils} from 'draft-js';
+import update from 'react-addons-update';
+import Reflux from 'reflux';
+import Draft from 'draft-js';
+import {convertFromRaw, convertToRaw} from 'draft-js';
+import {Editor, EditorState, ContentState, Modifier, SelectionState} from 'draft-js';
+import {AtomicBlockUtils, Entity, RichUtils} from 'draft-js';
+import {getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
+import {Map} from 'immutable';
+import Actions from 'appRoot/actions';
+import CodeBlock from 'appRoot/components/editor/CodeBlock';
+import CodeBlockEditable from 'appRoot/components/editor/CodeBlockEditable';
 
-const styles = {
-  root: {
-    fontFamily: '\'Helvetica\', sans-serif',
-    padding: 20,
-    width: 600,
-  },
-  editor: {
-    border: '1px solid #ccc',
-    cursor: 'text',
-    minHeight: 80,
-    padding: 10,
-  },
-  button: {
-    marginTop: 10,
-    textAlign: 'center',
-  },
-};
+const {hasCommandModifier} = KeyBindingUtil;
 
-class PlainTextEditorExample extends React.Component {
-  constructor(props) {
-    console.log("CIAO");
-    super(props);
-    this.state = {editorState: EditorState.createEmpty()};
-
-    this.focus = () => this.refs.editor.focus();
-    this.onChange = (editorState) => this.setState({editorState});
-    this.logState = () => console.log(this.state.editorState.toJS());
+function customKeyBindingFn(e: SyntheticKeyboardEvent): string {
+  if (e.keyCode === 83 /* `S` key */ && hasCommandModifier(e)) {
+    return 'editor-save';
   }
+  return getDefaultKeyBinding(e);
+}
 
-  handleKeyCommand(command) {
-    const newState = RichUtils.handleKeyCommand(this.state.editorState, command);
+const insertComponentBlock = (type, editorState) => {
+  var entityKey;
+  if (type == 'code') {
+    entityKey = Entity.create(
+      'TOKEN',
+      'MUTABLE',
+      {
+        type: 'code',
+        visible: true,
+        content: '',
+        output: ''
+      }
+    );
+  }
+  else if (type == 'react') {
+    entityKey = Entity.create(
+      'TOKEN',
+      'IMMUTABLE',
+      {content: ''}
+    );
+  }
+  return AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
+}
+
+const removeComponentBlock = (editorState, blockKey) => {
+  var content = editorState.getCurrentContent();
+  var block = content.getBlockForKey(blockKey);
+
+  var targetRange = new SelectionState({
+    anchorKey: blockKey,
+    anchorOffset: 0,
+    focusKey: blockKey,
+    focusOffset: block.getLength(),
+  });
+
+  var withoutComponent = Modifier.removeRange(content, targetRange, 'backward');
+  var resetBlock = Modifier.setBlockType(
+    withoutComponent,
+    withoutComponent.getSelectionAfter(),
+    'unstyled'
+  );
+
+  var newState = EditorState.push(editorState, resetBlock, 'remove-range');
+  return EditorState.forceSelection(newState, resetBlock.getSelectionAfter());
+}
+
+export default React.createClass({
+  mixins: [Reflux.ListenerMixin],
+
+  getInitialState: () => {
+    return {
+      notebook: null,
+      loading: true,
+      editorState: EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+          convertFromRaw({
+            blocks: [{text: '', type: 'unstyled'}], entityMap: {}
+          })
+        )
+      ),
+      liveComponentEdits: Map(),
+    };
+  },
+
+  componentWillMount: function () {
+    this.notebookId = this.props.params.notebookId;
+    Actions.getNotebook(this.notebookId);
+    this.listenTo(Actions.getNotebook.completed, function(notebook) {
+      console.log(notebook);
+      let editorState = EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+          convertFromRaw(notebook.content)
+        )
+      );
+      this.setState({
+        notebook: notebook,
+        editorState: editorState,
+        loading: false });
+    });
+    this.listenTo(Actions.saveNotebook.completed, function(notebook) {
+        this.setState({
+            loading: false 
+        });
+    });
+  },
+
+  _focus: function() {
+    this.refs.editor.focus()
+  },
+
+  _onChange: function(editorState) {
+    var rawEditorState = convertToRaw(editorState.getCurrentContent());
+    this.setState(update(
+        this.state, {
+          notebook: { content: {$set: rawEditorState} },
+          editorState: {$set: editorState}
+        }
+      )
+    );
+  },
+
+  _blockRenderer: function(block) {
+    if (block.getType() === 'atomic') {
+      console.log("AAAAAA");
+      console.log(block.getType());
+      // const componentType = Entity.get(block.getEntityAt(0)).getData()['type'];
+      // if (componentType === 'code') {
+        return {
+          // component: CodeBlock,
+          // editable: false,
+          component: CodeBlockEditable,
+          editable: true,
+          props: {
+            onStartEdit: function(blockKey) {
+              this.setState({liveComponentEdits: this.state.liveComponentEdits.set(blockKey, true)});
+            }.bind(this),
+            onFinishEdit: function(blockKey) {
+              var {liveComponentEdits} = this.state;
+              this.setState({liveComponentEdits: liveComponentEdits.remove(blockKey)});
+            }.bind(this),
+            onRemove: function(blockKey) {
+              this._removeComponent(blockKey)
+            }.bind(this),
+          },
+        };
+      // }
+      // else {
+      // }
+    }
+    return null;
+  },
+
+  _handleKeyCommand: function(command) {
+    if (command === 'editor-save') {
+      Actions.saveNotebook(this.state.notebook, this.state.notebook.id);
+      this.setState({loading: true});
+    }
+    var {editorState} = this.state;
+    var newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
-      this.onChange(newState);
+      this._onChange(newState);
       return true;
     }
     return false;
-  }
+  },
 
-  _onBoldClick() {
-    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
-  }
+  _removeComponent: function(blockKey) {
+    var {editorState, liveComponentEdits} = this.state;
+    this.setState({
+      liveComponentEdits: liveComponentEdits.remove(blockKey),
+      editorState: removeComponentBlock(editorState, blockKey),
+    });
+  },
 
-  render() {
+  _insertCodeComponent: function() {
+    this.setState({
+      liveComponentEdits: Map(),
+      editorState: insertComponentBlock('code', this.state.editorState),
+    });
+  },
+
+  _insertReactComponent: function() {
+    this.setState({
+      liveComponentEdits: Map(),
+      editorState: insertComponentBlock('react', this.state.editorState),
+    });
+  },
+
+  _logState: function() {
+    console.log(this.state);
+    var {editorState} = this.state;
+    console.log(editorState.getCurrentContent());
+    var raw = convertToRaw(editorState.getCurrentContent());
+    console.log(raw);
+  },
+
+  render: function() {
+    console.log("[Editor] render: " + this.state.liveComponentEdits.count());
+    console.log(this.state.liveComponentEdits);
     return (
-      <div style={styles.root}>
-        <div style={styles.editor} onClick={this.focus}>
-        <button onClick={this._onBoldClick.bind(this)}>Bold</button>
-          <Editor
-            editorState={this.state.editorState}
-            onChange={this.onChange}
-            handleKeyCommand={this.handleKeyCommand}
-            placeholder="Enter some text..."
-            ref="editor"
-          />
+      <div className="Editor-container">
+        <div>{this.state.loading? "Loading" : ""}</div>
+        <button onClick={this._insertCodeComponent} className="Editor-insert">
+          {'Insert new Code component'}
+        </button>
+        <button onClick={this._insertReactComponent} className="Editor-insert">
+          {'Insert new React component'}
+        </button>
+        <button onClick={this._logState} className="Editor-insert">
+          {'Log State'}
+        </button>
+        <div className="Editor-root">
+          <div className="Editor-editor" onClick={this._focus}>
+            <Editor
+              blockRendererFn={this._blockRenderer}
+              editorState={this.state.editorState}
+              handleKeyCommand={this._handleKeyCommand}
+              keyBindingFn={customKeyBindingFn}
+              onChange={this._onChange}
+              placeholder="Start a document..."
+              readOnly={this.state.liveComponentEdits.count()}
+              ref="editor"
+              spellCheck={true}
+            />
+          </div>
         </div>
-        <input
-            onClick={this.logState}
-            style={styles.button}
-            type="button"
-            value="Log State"
-          />
       </div>
     );
   }
-};
-
-export default React.createClass({
-   render: function () {
-        return (
-          <PlainTextEditorExample />
-        );
-    }
 });
