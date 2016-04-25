@@ -25,7 +25,17 @@
             "data": {
               "type": "code",
               "visible": true,
-              "content": "SASASAAS",
+              "content": "Python code also here.",
+              "output": ""
+            }
+          },
+          "1": {
+            "type": "TOKEN",
+            "mutability": "IMMUTABLE",
+            "data": {
+              "type": "code",
+              "visible": true,
+              "content": "Python code",
               "output": "test test test"
             }
           }
@@ -33,44 +43,6 @@
         "blocks": [
           {
             "key": "avnq5",
-            "text": "This is a Draft-based editor that supports TeX rendering.",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": []
-          },
-          {
-            "key": "1u19e",
-            "text": "",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": []
-          },
-          {
-            "key": "78t4s",
-            "text": "Each TeX block below is represented as a DraftEntity object and rendered using Khan Academy's KaTeX library.",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": []
-          },
-          {
-            "key": "ef3mn",
-            "text": "SAVEEE",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [
-              {
-                "offset": 0,
-                "length": 6,
-                "style": "BOLD"
-              }
-            ],
-            "entityRanges": []
-          },
-          {
-            "key": "eqet",
             "text": " ",
             "type": "atomic",
             "depth": 0,
@@ -84,17 +56,105 @@
             ]
           },
           {
-            "key": "f0q5r",
-            "text": "EEEE",
+            "key": "5mme3",
+            "text": "This is a RepoExp notebook. ",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "1u19e",
+            "text": "In this notebook you can write text in a WYSIWYG fashion.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "ft8g4",
+            "text": "Like underlines ",
             "type": "unstyled",
             "depth": 0,
             "inlineStyleRanges": [
               {
-                "offset": 0,
-                "length": 4,
+                "offset": 5,
+                "length": 10,
                 "style": "UNDERLINE"
               }
             ],
+            "entityRanges": []
+          },
+          {
+            "key": "7bd86",
+            "text": "or BOLD",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 3,
+                "length": 4,
+                "style": "BOLD"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "5q7e9",
+            "text": "or italic ",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 3,
+                "length": 6,
+                "style": "ITALIC"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "78t4s",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "2ua1m",
+            "text": "Then you have code components:",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "eqet",
+            "text": " ",
+            "type": "atomic",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 0,
+                "length": 1,
+                "style": "BOLD"
+              }
+            ],
+            "entityRanges": [
+              {
+                "offset": 0,
+                "length": 1,
+                "key": 1
+              }
+            ]
+          },
+          {
+            "key": "f0q5r",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
             "entityRanges": []
           }
         ]

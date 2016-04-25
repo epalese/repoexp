@@ -10,17 +10,122 @@ a {
 	cursor: pointer;
 }
 
+figure {
+    margin: 0;
+}
+
 // layout
 .app-container {
-	height: 100%;
+    
 }
 
-.editor-code-panel {
-    background-color: lightgrey;
-    width: 100%;
-    min-height: 100px;
+.editor-container {
+  font-family: 'Century Schoolbook', serif;
+  -webkit-font-smoothing: antialiased;
+  width: 900px;
+  margin: 40px auto;
 }
 
-.editor-code-active {
-  border: 1px solid black;  
+.editor-container
+.editor-working-area {
+  cursor: text;
+  font-size: 18px;
+  min-height: 40px;
+  padding: 30px;
+}
+
+.TeXEditor-button {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.TeXEditor-handle {
+  color: rgba(98, 177, 254, 1.0);
+  direction: ltr;
+  unicode-bidi: bidi-override;
+}
+
+.TeXEditor-hashtag {
+  color: rgba(95, 184, 138, 1.0);
+}
+
+.editor-code-component {
+  background-color: #fff;
+  cursor: pointer;
+  /* margin: 20px auto;
+  padding: 20px; */
+  -webkit-transition: background-color 0.2s fade-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  border-top: 1px dotted lightgrey;
+  border-bottom: 1px dotted lightgrey;
+}
+
+.editor-code-edit .editor-code-output {
+    color: #888;
+}
+
+.editor-code-edit-panel {
+  font-family: 'Helvetica', sans-serif;
+  font-weight: 200;
+}
+
+.editor-code-output {
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;  
+}
+
+.editor-code-edit-panel .editor-code-edit-textarea {
+  border: 1px solid #e1e1e1;
+  display: block;
+  font-family: 'Inconsolata', 'Menlo', monospace;
+  font-size: 14px;
+  height: 110px;
+  margin: 20px auto 10px;
+  outline: none;
+  padding: 14px;
+  resize: none;
+  -webkit-box-sizing: border-box;
+  width: 100%;
+}
+
+.TeXEditor-buttons {
+  text-align: center;
+}
+
+.TeXEditor-saveButton,
+.TeXEditor-removeButton {
+  background-color: #fff;
+  border: 1px solid #0a0;
+  cursor: pointer;
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  font-size: 16px;
+  font-weight: 200;
+  margin: 10px auto;
+  padding: 6px;
+  -webkit-border-radius: 3px;
+  width: 100px;
+}
+
+.TeXEditor-removeButton {
+  border-color: #aaa;
+  color: #999;
+  margin-left: 8px;
+}
+
+.TeXEditor-invalidButton {
+  background-color: #eee;
+  border-color: #a00;
+  color: #666;
+}
+
+.TeXEditor-insert {
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  bottom: 30px;
+  position: fixed;
+  right: 30px;
 }

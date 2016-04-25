@@ -7,24 +7,27 @@ import {Entity} from 'draft-js';
 export default class CodeBlock extends React.Component {
   constructor(props) {
     super(props);
+    let output = Entity
+      .get(this.props.block.getEntityAt(0))
+      .getData()['output'];
     this.state = {
       editMode: false,
-      visible: false
+      output: output
     };
 
-    // this._onClick = () => {
-    //   if (this.state.editMode) {
-    //     return;
-    //   }
-    //   let {content, output} = this._getValue();
-    //   this.setState({
-    //     editMode: true,
-    //     content: content,
-    //     output: output
-    //   }, () => {
-    //     this._startEdit();
-    //   });
-    // };
+    this._onClick = () => {
+      if (this.state.editMode) {
+        return;
+      }
+      let {content, output} = this._getValue();
+      this.setState({
+        editMode: true,
+        content: content,
+        output: output
+      }, () => {
+        this._startEdit();
+      });
+    };
 
     this._onContentValueChange = evt => {
       var value = evt.target.value;
@@ -57,39 +60,9 @@ export default class CodeBlock extends React.Component {
     this._finishEdit = () => {
       this.props.blockProps.onFinishEdit(this.props.block.getKey());
     };
-
-    this._onClickTA = () => {
-      console.log("[CodeBlock.onClickTA]");
-      this.setState({editMode: true});
-      this._startEdit();
-    }
-
-    // this._onClickDiv = () => {
-    //   console.log("[CodeBlock.onClickDiv]");
-    // }
-
-    this._onBlurDiv = () => {
-      console.log("[CodeBlock._onBlurDiv]");
-      this.setState({editMode: false});
-      this._finishEdit();
-    }
-  }
-
-  componentDidMount() {
-    console.log("[CodeBlock.componentDidMount]");
-    let {visible, content, output} = this._getValue();
-    this.setState({
-      editMode: false,
-      visible: visible,
-      content: content,
-      output: output
-    });
   }
 
   _getValue() {
-    let visible = Entity
-      .get(this.props.block.getEntityAt(0))
-      .getData()['visible'];
     let content = Entity
       .get(this.props.block.getEntityAt(0))
       .getData()['content'];
@@ -97,79 +70,54 @@ export default class CodeBlock extends React.Component {
       .get(this.props.block.getEntityAt(0))
       .getData()['output'];
 
-    return {visible: visible, content: content, output: output};
+    return {content: content, output: output};
   }
 
   render() {
-    console.log("[CodeBlock.render] Viible = " + this.state.visible);
-    console.log("[CodeBlock.render] Edit mode = " + this.state.editMode);
-    var className = 'editor-code';
+    console.log("[render] ");
+    console.log(this.state);
+    var content = null;
     if (this.state.editMode) {
-      className += ' editor-code-active';
+      content = this.state.content;
+    } else {
+      content = this.state.output;
     }
+
+    var className = 'editor-code-component';
+    if (this.state.editMode) {
+      className += ' editor-code-edit';
+    }
+
     var editPanel = null;
-    if (this.state.visible) {
-      var buttonClass = 'editor-code-saveButton';
-      // <div
-      //       className="Editor-code-output"
-      //       dangerouslySetInnerHTML={{__html: this.state.output}} />
-      editPanel = (
-        <div className="Component-panel">
-          {
-            this.state.editMode ?
-            <textarea
-              className="Editor-code-content"
-              onClick={this._onClickTA}
-              onBlur={this._onBlurDiv} 
-              onChange={this._onContentValueChange}
-              ref="textarea"
-              value={this.state.content}
-            />
-            : 
-            <textarea
-              className="Editor-code-content"
-              onClick={this._onClickTA}
-              onChange={this._onContentValueChange}
-              ref="textarea"
-              value={this.state.content}
-              disabled
-            />
-          }
-          
-          
-          <div className="Editor-buttons">
+    if (this.state.editMode) {
+      var buttonClass = 'TeXEditor-saveButton';
+
+      editPanel =
+        <div className="editor-code-edit-panel">
+          <div className="TeXEditor-buttons">
             <button
               className={buttonClass}
-              onClick={this._save} >
-              {'Done'}
+              onClick={this._save}>
+              Done
             </button>
-            <button className="Editor-removeButton" onClick={this._remove}>
+            <button className="TeXEditor-removeButton" onClick={this._remove}>
               Remove
             </button>
           </div>
-        </div>
-      );
-      return (
-        <div className={className}>
-          {editPanel}
-        </div>
-      );
+          <textarea
+            className="editor-code-edit-textarea"
+            onChange={this._onContentValueChange}
+            ref="textarea"
+            value={this.state.content}
+          />
+        </div>;
     }
-    else {
-      // return (
-      //   <div 
-      //     className={className}
-      //      >
-      //     {this.state.code}
-      //     <button  onClick={this._onClick}>Open</button>
-      //   </div>
-      // );
-      return (
-        <div 
-          className={className} >
-          {this.state.code}
-        </div>
-      );
-    }
+
+    return (
+      <div className={className} onClick={this._onClick}>
+        <div className="editor-code-output" dangerouslySetInnerHTML={{__html: this.state.output}} />
+        {editPanel}
+      </div>
+    );
   }
 }

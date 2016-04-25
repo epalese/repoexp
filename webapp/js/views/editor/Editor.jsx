@@ -27,7 +27,7 @@ const insertComponentBlock = (type, editorState) => {
   if (type == 'code') {
     entityKey = Entity.create(
       'TOKEN',
-      'MUTABLE',
+      'IMMUTABLE',
       {
         type: 'code',
         visible: true,
@@ -125,15 +125,11 @@ export default React.createClass({
 
   _blockRenderer: function(block) {
     if (block.getType() === 'atomic') {
-      console.log("AAAAAA");
-      console.log(block.getType());
-      // const componentType = Entity.get(block.getEntityAt(0)).getData()['type'];
-      // if (componentType === 'code') {
+      const componentType = Entity.get(block.getEntityAt(0)).getData()['type'];
+      if (componentType === 'code') {
         return {
-          // component: CodeBlock,
-          // editable: false,
-          component: CodeBlockEditable,
-          editable: true,
+          component: CodeBlock,
+          editable: false,
           props: {
             onStartEdit: function(blockKey) {
               this.setState({liveComponentEdits: this.state.liveComponentEdits.set(blockKey, true)});
@@ -147,9 +143,9 @@ export default React.createClass({
             }.bind(this),
           },
         };
-      // }
-      // else {
-      // }
+      }
+      else {
+      }
     }
     return null;
   },
@@ -199,10 +195,8 @@ export default React.createClass({
   },
 
   render: function() {
-    console.log("[Editor] render: " + this.state.liveComponentEdits.count());
-    console.log(this.state.liveComponentEdits);
     return (
-      <div className="Editor-container">
+      <div className="editor-container">
         <div>{this.state.loading? "Loading" : ""}</div>
         <button onClick={this._insertCodeComponent} className="Editor-insert">
           {'Insert new Code component'}
@@ -213,8 +207,8 @@ export default React.createClass({
         <button onClick={this._logState} className="Editor-insert">
           {'Log State'}
         </button>
-        <div className="Editor-root">
-          <div className="Editor-editor" onClick={this._focus}>
+        <div className="editor-root">
+          <div className="editor-working-area" onClick={this._focus}>
             <Editor
               blockRendererFn={this._blockRenderer}
               editorState={this.state.editorState}
