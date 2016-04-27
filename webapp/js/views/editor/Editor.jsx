@@ -24,11 +24,34 @@ function customKeyBindingFn(e: SyntheticKeyboardEvent): string {
 
 const insertComponentBlock = (type, editorState) => {
   var entityKey;
+  // var blocks = editorState.getCurrentContent().getBlocksAsArray();
+  // for (let block of blocks) {
+  //   console.log(block);
+  //   if (block.getType() === 'atomic') {
+  //     let data = Entity.get(block.getEntityAt(0)).getData()
+  //     let type = Entity.get(block.getEntityAt(0)).getData()['type'];
+  //     let id = Entity.get(block.getEntityAt(0)).getData()['id'];
+  //     console.log(data);
+  //     console.log(type);
+  //     console.log(id);
+  //   }
+  // }
+  // var maxId = 1 + Math.max.apply(Math, editorState.getCurrentContent().getBlocksAsArray().map(
+  //     function(block) {
+  //       if (block.getType() === 'atomic') {
+  //         return Entity.get(block.getEntityAt(0)).getData()['id'];
+  //       }
+  //       return -1;
+  //     }
+  // ));
+  // maxId = (Math.abs(maxId) != Infinity) ? maxId : 0;
+  let newId = new Date().getTime();
   if (type == 'code') {
     entityKey = Entity.create(
       'TOKEN',
       'IMMUTABLE',
       {
+        id: newId,
         type: 'code',
         visible: true,
         content: '',
@@ -40,7 +63,13 @@ const insertComponentBlock = (type, editorState) => {
     entityKey = Entity.create(
       'TOKEN',
       'IMMUTABLE',
-      {content: ''}
+      {
+        id: newId,
+        type: 'react',
+        visible: true,
+        content: '',
+        output: ''
+      }
     );
   }
   return AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
@@ -90,7 +119,6 @@ export default React.createClass({
     this.notebookId = this.props.params.notebookId;
     Actions.getNotebook(this.notebookId);
     this.listenTo(Actions.getNotebook.completed, function(notebook) {
-      console.log(notebook);
       let editorState = EditorState.createWithContent(
         ContentState.createFromBlockArray(
           convertFromRaw(notebook.content)
@@ -152,8 +180,17 @@ export default React.createClass({
 
   _handleKeyCommand: function(command) {
     if (command === 'editor-save') {
-      Actions.saveNotebook(this.state.notebook, this.state.notebook.id);
-      this.setState({loading: true});
+      var notebook = this.state.notebook;
+      notebook.content = convertToRaw(this.state.editorState.getCurrentContent());
+      Actions.saveNotebook(notebook, this.state.notebook.id);
+      // this.setState({loading: true});
+      this.setState(update(
+        this.state, {
+          notebook: {$set: notebook},
+          loading: {$set: true}
+        }
+      )
+    );
     }
     var {editorState} = this.state;
     var newState = RichUtils.handleKeyCommand(editorState, command);
