@@ -24,27 +24,6 @@ function customKeyBindingFn(e: SyntheticKeyboardEvent): string {
 
 const insertComponentBlock = (type, editorState) => {
   var entityKey;
-  // var blocks = editorState.getCurrentContent().getBlocksAsArray();
-  // for (let block of blocks) {
-  //   console.log(block);
-  //   if (block.getType() === 'atomic') {
-  //     let data = Entity.get(block.getEntityAt(0)).getData()
-  //     let type = Entity.get(block.getEntityAt(0)).getData()['type'];
-  //     let id = Entity.get(block.getEntityAt(0)).getData()['id'];
-  //     console.log(data);
-  //     console.log(type);
-  //     console.log(id);
-  //   }
-  // }
-  // var maxId = 1 + Math.max.apply(Math, editorState.getCurrentContent().getBlocksAsArray().map(
-  //     function(block) {
-  //       if (block.getType() === 'atomic') {
-  //         return Entity.get(block.getEntityAt(0)).getData()['id'];
-  //       }
-  //       return -1;
-  //     }
-  // ));
-  // maxId = (Math.abs(maxId) != Infinity) ? maxId : 0;
   let newId = new Date().getTime();
   if (type == 'code') {
     entityKey = Entity.create(
@@ -172,7 +151,23 @@ export default React.createClass({
           },
         };
       }
-      else {
+      else if (componentType === 'react') {
+        return {
+          component: ReactBlock,
+          editable: false,
+          props: {
+            onStartEdit: function(blockKey) {
+              this.setState({liveComponentEdits: this.state.liveComponentEdits.set(blockKey, true)});
+            }.bind(this),
+            onFinishEdit: function(blockKey) {
+              var {liveComponentEdits} = this.state;
+              this.setState({liveComponentEdits: liveComponentEdits.remove(blockKey)});
+            }.bind(this),
+            onRemove: function(blockKey) {
+              this._removeComponent(blockKey)
+            }.bind(this),
+          },
+        };  
       }
     }
     return null;

@@ -109,23 +109,65 @@ export default React.createClass({
   _onkeyDown: function(e) {
     if (e.which == 13 & e.ctrlKey) {
       console.log("CTRL + ENTER");
-      let {id, _, output} = this._getValue();
-      let type = Entity
-        .get(this.props.block.getEntityAt(0))
-        .getData()['type'];
-      var msg = {id: id, type: type, content: this.state.content};
-      console.log(msg);
-      Actions.sendMsgWS(id, msg).then(function() {
-          // signal that the message has been sent 
-          // and the server is processing the request
-          console.log("Message sent and under processing...");
-      });
+      // let {id, _, output} = this._getValue();
+      // let type = Entity
+      //   .get(this.props.block.getEntityAt(0))
+      //   .getData()['type'];
+      // var msg = {id: id, type: type, content: this.state.content};
+      // console.log(msg);
+      // Actions.sendMsgWS(id, msg).then(function() {
+      //     // signal that the message has been sent 
+      //     // and the server is processing the request
+      //     console.log("Message sent and under processing...");
+      // });
+
+      var content = this.state.content;
+      var parsedCode = JSON.parse(content);
+      var output = undefined;
+      var type = parsedCode['type'];
+      if (type == 'barChart') {
+          var variable = parsedCode['dataSet'];
+          var xVariableName = parsedCode['xVariableName'];
+          var yVariableName = parsedCode['yVariableName'];
+          var width = parsedCode['width'];
+          var height = parsedCode['height'];
+          var label = parsedCode['label'];
+          var margin = parsedCode['margin'];
+
+          var dataSet = window[variable];
+          var values = dataSet.map(function(e) {
+              return {x: e[xVariableName], y: e[yVariableName]};
+          });
+
+          var data = [{
+              label: label,
+              values: values
+          }];
+          
+          var BarChart = ReactD3.BarChart;
+          output =
+              <BarChart
+                  data={data}
+                  width={width}
+                  height={height}
+                  margin={margin}
+              />
+          console.log("output = ");
+          console.log(ReactD3);
+          console.log(BarChart);
+      }
+
+      this.setState(
+          update(this.state, {
+              paragraph: { 
+                  output: { $set: output }
+              }
+          })
+      );
     }
   },
 
   render() {
-    console.log(this.props.block);
-    
     var content = null;
     if (this.state.editMode) {
       content = this.state.content;
