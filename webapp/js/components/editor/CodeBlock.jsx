@@ -4,7 +4,10 @@ import React from 'react';
 import update from 'react-addons-update';
 import Reflux from 'reflux';
 import Actions from 'appRoot/actions';
-import {Entity, EditorBlock} from 'draft-js';
+import {Entity, Editor, EditorState, ContentState} from 'draft-js';
+import {getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
+
+const {isCtrlKeyCommand, hasCommandModifier} = KeyBindingUtil;
 
 export default React.createClass({
   mixins: [
@@ -13,27 +16,27 @@ export default React.createClass({
 
   getInitialState: function() {
     let {id, content, output} = this._getValue();
-    // let output = Entity
-    //   .get(this.props.block.getEntityAt(0))
-    //   .getData()['output'];
     return {
+      id: id,
       editMode: false,
+      visible: true,
       content: content,
+      editorState: EditorState.createWithContent(
+        ContentState.createFromText(content)
+      ),
       output: output
     };
   },
 
   componentWillMount: function() {
-    let id = Entity
-        .get(this.props.block.getEntityAt(0))
-        .getData()['id'];
+    // let id = Entity
+    //     .get(this.props.block.getEntityAt(0))
+    //     .getData()['id'];
+    let id = this.state.id;
     this.listenTo(Actions.sendMsgWS.completed, function(blockId, msg) {
         if (blockId == id) {
             console.log("actions.sendWS completed");
             console.log(msg);
-            // this.setState({ notebook: notebook, loading: false });
-            // update the paragraph to notify that the message has been sent
-            // and we are waiting for an anwer
         }
     });
     this.listenTo(Actions.receiveMsgWS, function(blockId, response) {
@@ -45,31 +48,78 @@ export default React.createClass({
     });
   },
 
-  _onClick: function() {
+  _getValue: function() {
+    let id = Entity
+        .get(this.props.block.getEntityAt(0))
+        .getData()['id'];
+    let content = Entity
+      .get(this.props.block.getEntityAt(0))
+      .getData()['content'];
+    let output = Entity
+      .get(this.props.block.getEntityAt(0))
+      .getData()['output'];
+    return {id: id, content: content, output: output};
+  },
+
+  _onBlur: function() {
+    console.log(`[${this.state.id}] Calling _onBlur`);
     if (this.state.editMode) {
-      return;
+      var entityKey = this.props.block.getEntityAt(0);
+      Entity.mergeData(entityKey, {
+        content: this.state.content,
+        output: this.state.output
+      });
+      this.setState({
+        editMode: false
+      }, this._finishEdit(this.state.id));
     }
-    // let {content, output} = this._getValue();
+  },
+
+  _onClick: function(e) {
+    e.stopPropagation();
+    this.props.blockProps.onBlurCallback(this.state.id, this._onBlur);
+    if (this.state.visible) {
+      if (this.state.editMode) {
+        return;
+      } else {
+        this.setState({
+          editMode: true,
+          // content: content,
+          // output: output
+        }, () => {
+          this._startEdit(this.state.id);
+          setTimeout(() => this.refs.editor2.focus(), 0);
+        });
+      }
+    } else {
+      let {id, content, output} = this._getValue();
+      this.setState({
+          editMode: false,
+          visible: true,
+          content: content
+        });
+    }
+  },
+
+  // _onContentValueChange: function(evt) {
+  //   var value = evt.target.value;
+  //   this.setState(update(
+  //     this.state, {
+  //       content: {$set: value},
+  //     })
+  //   );
+  // },
+
+  _onEditorChange: function(editorState) {
+    var value = editorState.getCurrentContent().getPlainText();
     this.setState({
-      editMode: true,
-      // content: content,
-      // output: output
-    }, () => {
-      this._startEdit();
+      content: value,
+      editorState: editorState
     });
   },
 
-  _onContentValueChange: function(evt) {
-    var value = evt.target.value;
-    this.setState(update(
-      this.state, {
-        content: {$set: value},
-      })
-    );
-  },
-
-  _save: function() {
-    console.log(this.props);
+  _save: function(e) {
+    e.stopPropagation();
     var entityKey = this.props.block.getEntityAt(0);
     Entity.mergeData(entityKey, {
       content: this.state.content,
@@ -77,6 +127,7 @@ export default React.createClass({
     });
     this.setState({
       editMode: false,
+      visible: false
     }, this._finishEdit);
   },
 
@@ -92,22 +143,16 @@ export default React.createClass({
     this.props.blockProps.onFinishEdit(this.props.block.getKey());
   },
 
-  _getValue: function() {
-    let id = Entity
-        .get(this.props.block.getEntityAt(0))
-        .getData()['id'];
-    let content = Entity
-      .get(this.props.block.getEntityAt(0))
-      .getData()['content'];
-    let output = Entity
-      .get(this.props.block.getEntityAt(0))
-      .getData()['output'];
-
-    return {id: id, content: content, output: output};
+  _customKeyBindingFn: function(e: SyntheticKeyboardEvent): string {
+    return getDefaultKeyBinding(e);
   },
 
-  _onkeyDown: function(e) {
-    if (e.which == 13 & e.ctrlKey) {
+  _handleKeyCommand: function(command) {
+    
+  },
+
+  _handleReturn: function(e) {
+    if (e.keyCode === 13 /* `Enter` key */ && isCtrlKeyCommand(e)) {
       console.log("CTRL + ENTER");
       let {id, _, output} = this._getValue();
       let type = Entity
@@ -116,58 +161,59 @@ export default React.createClass({
       var msg = {id: id, type: type, content: this.state.content};
       console.log(msg);
       Actions.sendMsgWS(id, msg).then(function() {
-          // signal that the message has been sent 
-          // and the server is processing the request
           console.log("Message sent and under processing...");
       });
+      return true;
     }
   },
 
   render() {
-    console.log(this.props.block);
-    
-    var content = null;
+    var editPanelClassName = 'editor-code-edit-panel '
+    var outputClassName = 'editor-code-output';
+    var buttonClass = 'TeXEditor-saveButton';
     if (this.state.editMode) {
-      content = this.state.content;
-    } else {
-      content = this.state.output;
+
+      editPanelClassName = 'editor-code-edit-panel';
+      outputClassName = 'editor-code-output editor-code-disabled';
     }
-
-    var className = 'editor-code-component';
-    if (this.state.editMode) {
-      className += ' editor-code-edit';
+    else {
+      editPanelClassName = 'editor-code-edit-panel editor-code-disabled';
+      outputClassName = 'editor-code-output';
     }
-
-    var editPanel = null;
-    if (this.state.editMode) {
-      var buttonClass = 'TeXEditor-saveButton';
-
-      editPanel =
-        <div className="editor-code-edit-panel">
-          <div className="TeXEditor-buttons">
-            <button
-              className={buttonClass}
-              onClick={this._save}>
-              Done
-            </button>
-            <button className="TeXEditor-removeButton" onClick={this._remove}>
-              Remove
-            </button>
-          </div>
-          <textarea
-            className="editor-code-edit-textarea"
-            onChange={this._onContentValueChange}
-            ref="textarea"
-            value={this.state.content}
-            onKeyDown={this._onkeyDown}
+    var editPanel =
+      <div className={editPanelClassName}
+            style={
+                this.state.visible ?
+                {} :
+                {display: 'none'}
+              }>
+        <div className="TeXEditor-buttons">
+          <button
+            className={buttonClass}
+            onClick={this._save}>
+            Done
+          </button>
+          <button className="TeXEditor-removeButton" onClick={this._remove}>
+            Remove
+          </button>
+        </div>
+        <Editor
+            className="editor-code-editor"
+            editorState={this.state.editorState}
+            handleKeyCommand={this._handleKeyCommand}
+            handleReturn={this._handleReturn}
+            keyBindingFn={this._customKeyBindingFn}
+            onChange={this._onEditorChange}
+            placeholder="Start a document..."
+            readOnly={!this.state.editMode}
+            ref="editor2"
           />
-        </div>;
-    }
+      </div>;
 
     return (
-      <div className={className} onClick={this._onClick}>
+      <div className="editor-code-component" onClick={this._onClick} >
         {editPanel}
-        <div className="editor-code-output" dangerouslySetInnerHTML={{__html: this.state.output}} />
+        <div className={outputClassName} dangerouslySetInnerHTML={{__html: this.state.output}} />
       </div>
     );
   }

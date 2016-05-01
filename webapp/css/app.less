@@ -1,4 +1,4 @@
-@import "vendor/normalize.less";
+
 
 html, body {
 	height: 100%;
@@ -14,11 +14,6 @@ figure {
     margin: 0;
 }
 
-// layout
-.app-container {
-    
-}
-
 .editor-container {
   font-family: 'Century Schoolbook', serif;
   -webkit-font-smoothing: antialiased;
@@ -31,7 +26,6 @@ figure {
   cursor: text;
   font-size: 18px;
   min-height: 40px;
-  padding: 30px;
 }
 
 .TeXEditor-button {
@@ -45,15 +39,11 @@ figure {
   unicode-bidi: bidi-override;
 }
 
-.TeXEditor-hashtag {
-  color: rgba(95, 184, 138, 1.0);
-}
-
 .editor-code-component {
   background-color: #fff;
   cursor: pointer;
-  /* margin: 20px auto;
-  padding: 20px; */
+  font-family: 'Inconsolata', 'Menlo', monospace;
+  font-size: 14px;
   -webkit-transition: background-color 0.2s fade-in-out;
   user-select: none;
   -webkit-user-select: none;
@@ -61,13 +51,14 @@ figure {
   border-bottom: 1px dotted lightgrey;
 }
 
-.editor-code-edit .editor-code-output {
+.editor-code-disabled {
     color: #888;
 }
 
 .editor-code-edit-panel {
-  font-family: 'Helvetica', sans-serif;
-  font-weight: 200;
+  //font-family: 'Helvetica', sans-serif;
+  font-family: 'Inconsolata', 'Menlo', monospace;
+  font-weight: 100;
 }
 
 .editor-code-output {
@@ -77,7 +68,9 @@ figure {
   margin-bottom: 10px;  
 }
 
-.editor-code-edit-panel .editor-code-edit-textarea {
+
+/*
+.editor-code-editor {
   border: 1px solid #e1e1e1;
   display: block;
   font-family: 'Inconsolata', 'Menlo', monospace;
@@ -90,6 +83,7 @@ figure {
   -webkit-box-sizing: border-box;
   width: 100%;
 }
+*/
 
 .TeXEditor-buttons {
   text-align: center;
@@ -110,8 +104,7 @@ figure {
 }
 
 .TeXEditor-removeButton {
-  border-color: #aaa;
-  color: #999;
+  border-color: red;
   margin-left: 8px;
 }
 
@@ -119,13 +112,4 @@ figure {
   background-color: #eee;
   border-color: #a00;
   color: #666;
-}
-
-.TeXEditor-insert {
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  bottom: 30px;
-  position: fixed;
-  right: 30px;
 }

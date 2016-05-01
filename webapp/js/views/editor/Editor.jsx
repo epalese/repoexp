@@ -11,7 +11,7 @@ import {getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
 import {Map} from 'immutable';
 import Actions from 'appRoot/actions';
 import CodeBlock from 'appRoot/components/editor/CodeBlock';
-import CodeBlockEditable from 'appRoot/components/editor/CodeBlockEditable';
+import ReactBlock from 'appRoot/components/editor/ReactBlock';
 
 const {hasCommandModifier} = KeyBindingUtil;
 
@@ -116,6 +116,15 @@ export default React.createClass({
   },
 
   _focus: function() {
+    console.log("MAIN EDItOR FOCUS");
+    console.log(this.state.onBlurCallback);
+
+    if (this.state.onBlurCallback) {
+      this.state.onBlurCallback.callback();
+      this.setState({onBlurCallback: undefined});
+    }
+    // this.setState({onBlurCallback: callback});
+    console.log(`Active counter ${this.state.liveComponentEdits.count()}`);
     this.refs.editor.focus()
   },
 
@@ -148,10 +157,33 @@ export default React.createClass({
             onRemove: function(blockKey) {
               this._removeComponent(blockKey)
             }.bind(this),
+            onBlurCallback: function(id, callback) {
+              console.log(`Editor onBlurCallback set from ${id}`);
+              var oldBlurCallback = this.state.onBlurCallback;
+              if (oldBlurCallback) {
+                // Check if it is a new component that is trying to
+                // register a callback or it is still the old one.
+                // In the latter case simply skip the callback call.
+                let oldId = oldBlurCallback.id;
+                let oldCallback = oldBlurCallback.callback;
+                if (oldId != id) {
+                  console.log(`Editor onBlurCallback: it is the new ${oldId}! calling back`);
+                  oldCallback();
+                  this.setState({onBlurCallback: {id: id, callback: callback}});
+                }
+                else {
+                  console.log(`Editor onBlurCallback: it is still ${oldId}! Skipping`);
+                }
+              } else {
+                this.setState({onBlurCallback: {id: id, callback: callback}});
+              }
+              
+            }.bind(this)
           },
         };
       }
       else if (componentType === 'react') {
+        console.log("REACT");
         return {
           component: ReactBlock,
           editable: false,
@@ -166,6 +198,25 @@ export default React.createClass({
             onRemove: function(blockKey) {
               this._removeComponent(blockKey)
             }.bind(this),
+            onBlurCallback: function(id, callback) {
+              console.log(`Editor onBlurCallback set from ${id}`);
+              var oldBlurCallback = this.state.onBlurCallback;
+              if (oldBlurCallback) {
+                // Check if it is a new component that is trying to
+                // register a callback or it is still the old one.
+                // In the latter case simply skip the callback call.
+                let oldId = oldBlurCallback.id;
+                let oldCallback = oldBlurCallback.callback;
+                if (oldId != id) {
+                  console.log(`Editor onBlurCallback: it is the new ${oldId}! calling back`);
+                  oldCallback();
+                }
+                else {
+                  console.log(`Editor onBlurCallback: it is still ${oldId}! Skipping`);
+                }
+              }
+              this.setState({onBlurCallback: {id: id, callback: callback}});
+            }.bind(this)
           },
         };  
       }

@@ -23,11 +23,93 @@
             "type": "TOKEN",
             "mutability": "IMMUTABLE",
             "data": {
-              "id": 1461707622476,
+              "id": 1462093892262,
               "type": "code",
               "visible": true,
-              "content": "df = downloadCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')\n\ndf.show()",
-              "output": "Getting CSV file from url=https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv and filename=test_csv\n+--------------------+--------------------+---------------+--------------------+--------------------+--------------------+------------------+---------+--------------------+------------------+-------------+---------------+------------+----------------+\n|          Department|              Entity|Date_of_Payment|        Expense_Type|        Expense_Area|            Supplier|Transaction_Number|   Amount|         Description|Supplier_Post_Code|Supplier_Type|Contract_Number|Project_Code|Expenditure_Type|\n+--------------------+--------------------+---------------+--------------------+--------------------+--------------------+------------------+---------+--------------------+------------------+-------------+---------------+------------+----------------+\n|Department for Bu...|Department for Bu...|     11/09/2015|         Electricity|Finance & Commerc...|      EDF ENERGY plc|             61503|   -13.72|F&C Devolved Admi...|           PL3 5XQ|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     11/09/2015|         Electricity|Finance & Commerc...|      EDF ENERGY plc|             61503|    -5.21|F&C Devolved Admi...|           PL3 5XQ|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     11/09/2015|         Electricity|Finance & Commerc...|      EDF ENERGY plc|             61503| 44955.19|F&C Devolved Admi...|           PL3 5XQ|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     28/09/2015|                 Gas|Business & Local ...|CORONA ENERGY RET...|             72820|   286.34|BLG Devolved Admi...|          WD17 1JW|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     30/09/2015|Central Telecommu...|Finance & Commerc...|DAISY COMMUNICATI...|             75766|    49.92|F&C Devolved Admi...|           BB9 5SR|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     30/09/2015|Central Telecommu...|Finance & Commerc...|DAISY COMMUNICATI...|             80010|    49.92|F&C Devolved Admi...|           BB9 5SR|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     11/09/2015|Central Telecommu...|Finance & Commerc...|LEVEL 3 COMMUNICA...|             84139|130280.48|F&C Devolved Admi...|          RG24 8NA|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     30/09/2015|Central Telecommu...|Finance & Commerc...|DAISY COMMUNICATI...|             86140|    49.92|F&C Devolved Admi...|           BB9 5SR|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     16/09/2015| Estates Consultancy|Finance & Commerc...|DTZ DEBENHAM TIE ...|             86851|    70.00|LSC Properties-Es...|            B4 6AJ|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     16/09/2015| Estates Consultancy|Finance & Commerc...|DTZ DEBENHAM TIE ...|             86851|  3600.00|LSC Properties-Es...|            B4 6AJ|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     15/09/2015|Central Telecommu...|Finance & Commerc...|BRITISH TELECOMMU...|             88689|    20.00|F&C Devolved Admi...|          DH98 1BT|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     15/09/2015|Central Telecommu...|Finance & Commerc...|BRITISH TELECOMMU...|             88689|   117.44|F&C Devolved Admi...|          DH98 1BT|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     14/09/2015|         Advertising|People, Strategy ...| DENTSU AEGIS UK LTD|             89419|     5.78|Corporate Present...|           NW1 3BF|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     14/09/2015|         Advertising|People, Strategy ...| DENTSU AEGIS UK LTD|             89419|    68.70|Corporate Present...|           NW1 3BF|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     14/09/2015|         Advertising|People, Strategy ...| DENTSU AEGIS UK LTD|             89419|  6147.42|Corporate Present...|           NW1 3BF|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     14/09/2015|         Advertising|People, Strategy ...| DENTSU AEGIS UK LTD|             89419| 73989.70|Corporate Present...|           NW1 3BF|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     22/09/2015|Consultancy Expen...|Knowledge & Innov...|SCIENCE AND TECHN...|             90438|  2322.00|K&I Devolved Admi...|           SN2 1FF|     WGA ONLY|               |            |                |\n|Department for Bu...|Department for Bu...|     15/09/2015| Marketing and Media|Enterprise & Skil...|         INFERNO LTD|             90809|  9480.00|VE Strategy-Marke...|          WC2B 5AE|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     15/09/2015| Marketing and Media|Enterprise & Skil...|         INFERNO LTD|             90811|   750.00|VE Strategy-Marke...|          WC2B 5AE|       VENDOR|               |            |                |\n|Department for Bu...|Department for Bu...|     15/09/2015|     Office Supplies|People, Strategy ...|ONE WORLD WATER L...|             91573|    47.71|Innovation Space:...|            E8 4QN|       VENDOR|               |            |                |\n+--------------------+--------------------+---------------+--------------------+--------------------+--------------------+------------------+---------+--------------------+------------------+-------------+---------------+------------+----------------+\nonly showing top 20 rows\n\n"
+              "content": "print \"Hello repoexp user\"",
+              "output": "Hello repoexp user\n"
+            }
+          },
+          "1": {
+            "type": "TOKEN",
+            "mutability": "IMMUTABLE",
+            "data": {
+              "id": 1462095334808,
+              "type": "code",
+              "visible": true,
+              "content": "df = downloadCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')\ndf2 = df.withColumn(\"Amount\", df.Amount.cast(\"float\"))\ndf3 = sqlContext.sql(\"SELECT Supplier, SUM(CAST(Amount AS FLOAT)) as Tot_Amount FROM test_csv GROUP BY Supplier ORDER BY SUM(CAST(Amount AS FLOAT)) DESC LIMIT 5\")\ndf3.printSchema()\ndataFrameToJavaScriptVariable(df3, \"myvar\")\n",
+              "output": "Getting CSV file from url=https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv and filename=test_csv\nroot\n |-- Supplier: string (nullable = true)\n |-- Tot_Amount: double (nullable = true)\n\n"
+            }
+          },
+          "2": {
+            "type": "TOKEN",
+            "mutability": "IMMUTABLE",
+            "data": {
+              "id": 1462096211616,
+              "type": "react",
+              "visible": true,
+              "content": "{\n   \"type\": \"barChart\",\n   \"dataSet\": \"myvar\",\n   \"xVariableName\": \"Supplier\",\n   \"yVariableName\": \"Tot_Amount\",\n   \"width\": 500,\n   \"height\": 300,\n   \"label\": \"Sucammela\",\n   \"margin\": {\"top\": 10, \"bottom\": 50, \"left\": 50, \"right\": 10}\n}",
+              "output": {
+                "key": null,
+                "ref": null,
+                "props": {
+                  "data": [
+                    {
+                      "label": "Sucammela",
+                      "values": [
+                        {
+                          "x": "STUDENT LOANS COMPANY LIMITED",
+                          "y": 1358617829,
+                          "y0": 0
+                        },
+                        {
+                          "x": "POST OFFICE LTD",
+                          "y": 850930266.9301758,
+                          "y0": 0
+                        },
+                        {
+                          "x": "HIGHER EDUCATION FUNDING COUNCIL FOR ENGLAND",
+                          "y": 485789888,
+                          "y0": 0
+                        },
+                        {
+                          "x": "SKILLS FUNDING AGENCY",
+                          "y": 264440000,
+                          "y0": 0
+                        },
+                        {
+                          "x": "ENGINEERING AND PHYSICAL SCIENCES RESEARCH COUNCIL",
+                          "y": 191800000,
+                          "y0": 0
+                        }
+                      ]
+                    }
+                  ],
+                  "width": 500,
+                  "height": 300,
+                  "margin": {
+                    "top": 10,
+                    "bottom": 50,
+                    "left": 50,
+                    "right": 10
+                  },
+                  "xScale": null,
+                  "yScale": null,
+                  "offset": "zero",
+                  "order": "default",
+                  "barPadding": 0.5,
+                  "tooltipMode": "mouse",
+                  "tooltipOffset": {
+                    "top": -35,
+                    "left": 0
+                  },
+                  "tooltipHtml": null,
+                  "tooltipContained": false,
+                  "colorByLabel": true
+                },
+                "_owner": null,
+                "_store": {}
+              }
             }
           }
         },
@@ -41,7 +123,31 @@
             "entityRanges": []
           },
           {
-            "key": "3tu3g",
+            "key": "av9v4",
+            "text": "Hello. This is a sample Repoexp notebook.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "1r2v5",
+            "text": "Please take care and appreciate :-)",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "arvvh",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "ev4qs",
             "text": " ",
             "type": "atomic",
             "depth": 0,
@@ -55,7 +161,67 @@
             ]
           },
           {
-            "key": "dv41n",
+            "key": "5ahk9",
+            "text": " ",
+            "type": "atomic",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": [
+              {
+                "offset": 0,
+                "length": 1,
+                "key": 1
+              }
+            ]
+          },
+          {
+            "key": "1amop",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "c1je9",
+            "text": "Now we play a bit with the downloaded CSV file:",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "572c4",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "1o87e",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "6n0qb",
+            "text": " ",
+            "type": "atomic",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": [
+              {
+                "offset": 0,
+                "length": 1,
+                "key": 2
+              }
+            ]
+          },
+          {
+            "key": "33esp",
             "text": "",
             "type": "unstyled",
             "depth": 0,
@@ -64,7 +230,7 @@
           },
           {
             "key": "5mme3",
-            "text": "",
+            "text": "The end.",
             "type": "unstyled",
             "depth": 0,
             "inlineStyleRanges": [],
