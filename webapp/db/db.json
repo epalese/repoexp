@@ -23,22 +23,22 @@
             "type": "TOKEN",
             "mutability": "IMMUTABLE",
             "data": {
-              "id": 1462093892262,
+              "id": 1462095334808,
               "type": "code",
               "visible": false,
-              "content": "print \"Hello repoexp user\"",
-              "output": "Hello repoexp user\n"
+              "content": "df = downloadCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')\ndf2 = df.withColumn(\"Amount\", df.Amount.cast(\"float\"))\ndf3 = sqlContext.sql(\"SELECT Supplier, SUM(CAST(Amount AS FLOAT)) as Tot_Amount FROM test_csv GROUP BY Supplier ORDER BY SUM(CAST(Amount AS FLOAT)) DESC LIMIT 5\")\ndf3.printSchema()\ndataFrameToJavaScriptVariable(df3, \"myvar\")\n",
+              "output": "Getting CSV file from url=https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv and filename=test_csv\nroot\n |-- Supplier: string (nullable = true)\n |-- Tot_Amount: double (nullable = true)\n\n"
             }
           },
           "1": {
             "type": "TOKEN",
             "mutability": "IMMUTABLE",
             "data": {
-              "id": 1462095334808,
+              "id": 1462230123641,
               "type": "code",
               "visible": false,
-              "content": "df = downloadCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')\ndf2 = df.withColumn(\"Amount\", df.Amount.cast(\"float\"))\ndf3 = sqlContext.sql(\"SELECT Supplier, SUM(CAST(Amount AS FLOAT)) as Tot_Amount FROM test_csv GROUP BY Supplier ORDER BY SUM(CAST(Amount AS FLOAT)) DESC LIMIT 5\")\ndf3.printSchema()\ndataFrameToJavaScriptVariable(df3, \"myvar\")\n",
-              "output": "Getting CSV file from url=https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv and filename=test_csv\nroot\n |-- Supplier: string (nullable = true)\n |-- Tot_Amount: double (nullable = true)\n\n"
+              "content": "df3.show()",
+              "output": "+--------------------+-------------------+\n|            Supplier|         Tot_Amount|\n+--------------------+-------------------+\n|STUDENT LOANS COM...|      1.358617829E9|\n|     POST OFFICE LTD|8.509302669301758E8|\n|HIGHER EDUCATION ...|       4.85789888E8|\n|SKILLS FUNDING AG...|           2.6444E8|\n|ENGINEERING AND P...|            1.918E8|\n+--------------------+-------------------+\n\n"
             }
           },
           "2": {
@@ -97,15 +97,15 @@
             "entityRanges": []
           },
           {
-            "key": "1r2v5",
-            "text": "Please take care and appreciate :-)",
+            "key": "arvvh",
+            "text": "I hope you will enjoy it :-)",
             "type": "unstyled",
             "depth": 0,
             "inlineStyleRanges": [],
             "entityRanges": []
           },
           {
-            "key": "arvvh",
+            "key": "ec3l2",
             "text": "",
             "type": "unstyled",
             "depth": 0,
@@ -113,7 +113,61 @@
             "entityRanges": []
           },
           {
-            "key": "ev4qs",
+            "key": "ea7dp",
+            "text": "Data wrangling",
+            "type": "header-two",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "duvaq",
+            "text": "The following are code blocks. Click on them to access the expanded view that contains the Python code that generates the output displayed. ",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "72heg",
+            "text": "Once the expanded view is open, click the text area containing the Python code to activate it and start editing the code.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "e01s9",
+            "text": "To execute the code press CTRL + Enter and wait to see the output in the output box.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 26,
+                "length": 12,
+                "style": "BOLD"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "ddq7q",
+            "text": "Remember that CTRL+ENTER must be pressed while the code section is active (this is notified by the fact that the font color is dark black instead when the section is not active the color is grey).",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "3cvf2",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "5ahk9",
             "text": " ",
             "type": "atomic",
             "depth": 0,
@@ -127,7 +181,7 @@
             ]
           },
           {
-            "key": "5ahk9",
+            "key": "crmaj",
             "text": " ",
             "type": "atomic",
             "depth": 0,
@@ -141,7 +195,7 @@
             ]
           },
           {
-            "key": "1amop",
+            "key": "4dtpu",
             "text": "",
             "type": "unstyled",
             "depth": 0,
@@ -149,11 +203,63 @@
             "entityRanges": []
           },
           {
-            "key": "c1je9",
-            "text": "Now we play a bit with the downloaded CSV file:",
+            "key": "biq5l",
+            "text": "Reporting",
+            "type": "header-two",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "9hbs5",
+            "text": "In the previous section we have downloaded CSV from the Internet and did some basic aggregation. Now we are going to display the result of the aggregation using a bar chart.",
             "type": "unstyled",
             "depth": 0,
             "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "ad16k",
+            "text": "If you look at the Python code you can notice the following instruction:",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "fcqrb",
+            "text": "dataFrameToJavaScriptVariable(df3, \"myvar\")",
+            "type": "blockquote",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 0,
+                "length": 43,
+                "style": "CODE"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "e3e3n",
+            "text": "This instruction moves the data from the server to the browser. Once the data is living in the browser we can use it to build our reports using React components (currently only a Bar chart is provided).",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "bavg7",
+            "text": "The following is a React component. As before click on the chart to see the properties of the chart. If you modify the values of the properties press CTRL + ENTER to update the chart.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 150,
+                "length": 12,
+                "style": "BOLD"
+              }
+            ],
             "entityRanges": []
           },
           {
@@ -188,23 +294,7 @@
           },
           {
             "key": "5mme3",
-            "text": "I am testing a layout where the chart is on one side while the text goes around.",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": []
-          },
-          {
-            "key": "ci73b",
-            "text": "So let's write something until we reach the end of the chart:",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": []
-          },
-          {
-            "key": "fndno",
-            "text": "",
+            "text": "Remember that in order to render the chart the myvar data set must be available in the browser. And to make it available in the browser the previous code blocks must be executed.",
             "type": "unstyled",
             "depth": 0,
             "inlineStyleRanges": [],
@@ -212,6 +302,66 @@
           },
           {
             "key": "8raq1",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "3toa4",
+            "text": "Now we are going to show how the text can float around the chart. In fact if you look into the chart properties you can see",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "3ilj4",
+            "text": "that the layout section has:",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 9,
+                "length": 6,
+                "style": "CODE"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "34i5m",
+            "text": "\"float\": \"left\"",
+            "type": "blockquote",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 0,
+                "length": 15,
+                "style": "CODE"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "ek64t",
+            "text": "This moves the chart on the left of the page and makes the text floats on its. right.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "e0ssk",
+            "text": "So now we are going to fill the remainig space with some random text to show how the text fill the entire width of the page after reaching the end of the chart.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "e8sub",
             "text": "What is Lorem Ipsum?",
             "type": "header-three",
             "depth": 0,
@@ -239,30 +389,10 @@
           },
           {
             "key": "46cf",
-            "text": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.",
+            "text": "",
             "type": "unstyled",
             "depth": 0,
-            "inlineStyleRanges": [
-              {
-                "offset": 0,
-                "length": 763,
-                "style": "CODE"
-              }
-            ],
-            "entityRanges": []
-          },
-          {
-            "key": "ar9d9",
-            "text": "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [
-              {
-                "offset": 0,
-                "length": 295,
-                "style": "CODE"
-              }
-            ],
+            "inlineStyleRanges": [],
             "entityRanges": []
           }
         ]
