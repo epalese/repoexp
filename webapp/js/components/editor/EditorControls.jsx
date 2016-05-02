@@ -51,6 +51,7 @@ const BLOCK_TYPES = [
   {label: 'OL', style: 'ordered-list-item'},
   {label: 'Code Block', style: 'code-block'},
   {label: 'React Block', style: 'react-block'},
+  // {label: 'Two Cols', style: 'two-cols-block'}
 ];
 
 const BlockStyleControls = (props) => {

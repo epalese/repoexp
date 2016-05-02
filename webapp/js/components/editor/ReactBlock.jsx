@@ -16,13 +16,17 @@ export default React.createClass({
   ],
 
   getInitialState: function() {
-    let {id, content, output} = this._getValue();
+    let {id, visible, content, output} = this._getValue();
     
     if (content) {
       var parsedCode = JSON.parse(content);
-      var type = parsedCode['type'];
-      var dataSet = output.props.data[0].values;
-      output = this.renderChart(type, parsedCode, dataSet, true);
+      var layoutOptions = parsedCode['layout'];
+      var chartOptions = parsedCode['chart'];
+      var type = chartOptions['type'];
+      // var type = parsedCode['type'];
+      // var dataSet = output.props.data[0].values;
+      var dataSet = output;
+      output = this.renderChart(type, layoutOptions, chartOptions, dataSet, true);
     }
     else {
       output = null;
@@ -31,7 +35,7 @@ export default React.createClass({
     return {
       id: id,
       editMode: false,
-      visible: true,
+      visible: visible,
       content: content,
       editorState: EditorState.createWithContent(
         ContentState.createFromText(content)
@@ -64,27 +68,38 @@ export default React.createClass({
     let id = Entity
         .get(this.props.block.getEntityAt(0))
         .getData()['id'];
+    let visible = Entity
+        .get(this.props.block.getEntityAt(0))
+        .getData()['visible'];
     let content = Entity
       .get(this.props.block.getEntityAt(0))
       .getData()['content'];
     let output = Entity
       .get(this.props.block.getEntityAt(0))
       .getData()['output'];
-    return {id: id, content: content, output: output};
+    return {id: id, visible: visible, content: content, output: output};
   },
 
   _onBlur: function() {
-    console.log(`[${this.state.id}] Calling _onBlur`);
-    if (this.state.editMode) {
+    // if (this.state.editMode) {
+      var outputData = null;
+      if (this.state.output) {
+        console.log("_onBlur");
+        console.log(this.state.output);
+        // outputData = this.state.output.props.data[0].values
+        outputData = this.state.output.props.children.props.data[0].values
+      }
       var entityKey = this.props.block.getEntityAt(0);
       Entity.mergeData(entityKey, {
+        visible: this.state.visible,
         content: this.state.content,
-        output: this.state.output
+        // output: this.state.output
+        output: outputData
       });
       this.setState({
         editMode: false
       }, this._finishEdit(this.state.id));
-    }
+    // }
   },
 
   _onClick: function(e) {
@@ -104,7 +119,7 @@ export default React.createClass({
         });
       }
     } else {
-      let {id, content, output} = this._getValue();
+      let {id, visible, content, output} = this._getValue();
       this.setState({
           editMode: false,
           visible: true,
@@ -123,10 +138,17 @@ export default React.createClass({
 
   _save: function(e) {
     e.stopPropagation();
+    var outputData = null;
+    if (this.state.output) {
+      // outputData = this.state.output.props.data[0].values
+      outputData = this.state.output.props.children.props.data[0].values
+    }
     var entityKey = this.props.block.getEntityAt(0);
     Entity.mergeData(entityKey, {
+      visible: false,
       content: this.state.content,
-      output: this.state.output
+      // output: this.state.output
+      output: outputData
     });
     this.setState({
       editMode: false,
@@ -154,14 +176,14 @@ export default React.createClass({
     
   },
 
-  renderChart: function(type, options, data, stored) {
+  renderChart: function(type, layoutOptions, chartOptions, data, stored) {
     if (type == 'barChart') {
-      var xVariableName = options['xVariableName'];
-      var yVariableName = options['yVariableName'];
-      var width = options['width'];
-      var height = options['height'];
-      var label = options['label'];
-      var margin = options['margin'];
+      var xVariableName = chartOptions['xVariableName'];
+      var yVariableName = chartOptions['yVariableName'];
+      var width = chartOptions['width'];
+      var height = chartOptions['height'];
+      var label = chartOptions['label'];
+      var margin = chartOptions['margin'];
 
       var chartData;
       if (!stored) {
@@ -181,29 +203,30 @@ export default React.createClass({
       }
       
       var BarChart = ReactD3.BarChart;
+      console.log(layoutOptions);
       var output =
+        <div style={layoutOptions}>
           <BarChart
               data={chartData}
               width={width}
               height={height}
               margin={margin}
           />
-      console.log("output = ");
-      console.log(output);
+        </div>
       return output;
     }
   },
 
   _handleReturn: function(e) {
     if (e.keyCode === 13 /* `Enter` key */ && isCtrlKeyCommand(e)) {
-      console.log("CTRL + ENTER");
       var content = this.state.content;
       var parsedCode = JSON.parse(content);
-      
-      var type = parsedCode['type'];
-      var variable = parsedCode['dataSet'];
+      var layoutOptions = parsedCode['layout'];
+      var chartOptions = parsedCode['chart'];
+      var type = chartOptions['type'];
+      var variable = chartOptions['dataSet'];
       var dataSet = window[variable];
-      var output = this.renderChart(type, parsedCode, dataSet, false);
+      var output = this.renderChart(type, layoutOptions, chartOptions, dataSet, false);
 
       this.setState(
         update(this.state, {

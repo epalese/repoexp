@@ -6,10 +6,13 @@ import Reflux from 'reflux';
 import Draft from 'draft-js';
 import {convertFromRaw, convertToRaw} from 'draft-js';
 import {Editor, EditorState, ContentState, Modifier, SelectionState} from 'draft-js';
-import {AtomicBlockUtils, Entity, RichUtils} from 'draft-js';
+import {Entity, RichUtils} from 'draft-js';
 import {getDefaultKeyBinding, KeyBindingUtil} from 'draft-js';
 import {Map} from 'immutable';
 import Actions from 'appRoot/actions';
+import {insertCustomBlock} from 'appRoot/components/editor/util/BlockUtils';
+import {insertComponentBlock} from 'appRoot/components/editor/util/BlockUtils';
+import {removeComponentBlock} from 'appRoot/components/editor/util/BlockUtils';
 import CodeBlock from 'appRoot/components/editor/CodeBlock';
 import ReactBlock from 'appRoot/components/editor/ReactBlock';
 import {BlockStyleControls, InlineStyleControls} from 'appRoot/components/editor/EditorControls';
@@ -21,60 +24,6 @@ function customKeyBindingFn(e: SyntheticKeyboardEvent): string {
     return 'editor-save';
   }
   return getDefaultKeyBinding(e);
-}
-
-const insertComponentBlock = (type, editorState) => {
-  var entityKey;
-  let newId = new Date().getTime();
-  if (type == 'code') {
-    entityKey = Entity.create(
-      'TOKEN',
-      'IMMUTABLE',
-      {
-        id: newId,
-        type: 'code',
-        visible: true,
-        content: '',
-        output: ''
-      }
-    );
-  }
-  else if (type == 'react') {
-    entityKey = Entity.create(
-      'TOKEN',
-      'IMMUTABLE',
-      {
-        id: newId,
-        type: 'react',
-        visible: true,
-        content: '',
-        output: ''
-      }
-    );
-  }
-  return AtomicBlockUtils.insertAtomicBlock(editorState, entityKey, ' ');
-}
-
-const removeComponentBlock = (editorState, blockKey) => {
-  var content = editorState.getCurrentContent();
-  var block = content.getBlockForKey(blockKey);
-
-  var targetRange = new SelectionState({
-    anchorKey: blockKey,
-    anchorOffset: 0,
-    focusKey: blockKey,
-    focusOffset: block.getLength(),
-  });
-
-  var withoutComponent = Modifier.removeRange(content, targetRange, 'backward');
-  var resetBlock = Modifier.setBlockType(
-    withoutComponent,
-    withoutComponent.getSelectionAfter(),
-    'unstyled'
-  );
-
-  var newState = EditorState.push(editorState, resetBlock, 'remove-range');
-  return EditorState.forceSelection(newState, resetBlock.getSelectionAfter());
 }
 
 
@@ -118,15 +67,10 @@ export default React.createClass({
   },
 
   _focus: function() {
-    // console.log("MAIN EDITOR FOCUS");
-    // console.log(this.state.onBlurCallback);
-
     if (this.state.onBlurCallback) {
       this.state.onBlurCallback.callback();
       this.setState({onBlurCallback: undefined});
     }
-    // this.setState({onBlurCallback: callback});
-    // console.log(`Active counter ${this.state.liveComponentEdits.count()}`);
     this.refs.editor.focus()
   },
 
@@ -141,12 +85,27 @@ export default React.createClass({
     );
   },
 
+  _toggleInlineStyle: function(inlineStyle) {
+    this._onChange(
+      RichUtils.toggleInlineStyle(
+        this.state.editorState,
+        inlineStyle
+      )
+    );
+  },
+
   _toggleBlockType: function(blockType) {
     if (blockType == 'code-block') {
-      this._insertCodeComponent();
+      this.setState({
+        liveComponentEdits: Map(),
+        editorState: insertComponentBlock('code', this.state.editorState),
+      });
     }
     else if (blockType == 'react-block') {
-      this._insertReactComponent();
+      this.setState({
+        liveComponentEdits: Map(),
+        editorState: insertComponentBlock('react', this.state.editorState),
+      });
     }
     else {
       this._onChange(
@@ -158,15 +117,6 @@ export default React.createClass({
     }
   },
 
-  _toggleInlineStyle: function(inlineStyle) {
-    this._onChange(
-      RichUtils.toggleInlineStyle(
-        this.state.editorState,
-        inlineStyle
-      )
-    );
-  },
-
   _blockRenderer: function(block) {
     if (block.getType() === 'atomic') {
       const componentType = Entity.get(block.getEntityAt(0)).getData()['type'];
@@ -176,7 +126,6 @@ export default React.createClass({
           editable: false,
           props: {
             onStartEdit: function(blockKey) {
-              // console.log(`onStarthEdit ${blockKey}`);
               this.setState({liveComponentEdits: this.state.liveComponentEdits.set(blockKey, true)});
             }.bind(this),
             onFinishEdit: function(blockKey) {
@@ -285,20 +234,6 @@ export default React.createClass({
     });
   },
 
-  _insertCodeComponent: function() {
-    this.setState({
-      liveComponentEdits: Map(),
-      editorState: insertComponentBlock('code', this.state.editorState),
-    });
-  },
-
-  _insertReactComponent: function() {
-    this.setState({
-      liveComponentEdits: Map(),
-      editorState: insertComponentBlock('react', this.state.editorState),
-    });
-  },
-
   _logState: function() {
     console.log(this.state);
     var {editorState} = this.state;
@@ -310,7 +245,7 @@ export default React.createClass({
   render: function() {
     return (
       <div className="editor-container">
-      
+
         <div className="editor-controls">
           <BlockStyleControls
             editorState={this.state.editorState}

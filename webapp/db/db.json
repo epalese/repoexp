@@ -25,7 +25,7 @@
             "data": {
               "id": 1462093892262,
               "type": "code",
-              "visible": true,
+              "visible": false,
               "content": "print \"Hello repoexp user\"",
               "output": "Hello repoexp user\n"
             }
@@ -36,7 +36,7 @@
             "data": {
               "id": 1462095334808,
               "type": "code",
-              "visible": true,
+              "visible": false,
               "content": "df = downloadCSV('https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv', 'test_csv')\ndf2 = df.withColumn(\"Amount\", df.Amount.cast(\"float\"))\ndf3 = sqlContext.sql(\"SELECT Supplier, SUM(CAST(Amount AS FLOAT)) as Tot_Amount FROM test_csv GROUP BY Supplier ORDER BY SUM(CAST(Amount AS FLOAT)) DESC LIMIT 5\")\ndf3.printSchema()\ndataFrameToJavaScriptVariable(df3, \"myvar\")\n",
               "output": "Getting CSV file from url=https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/482020/BIS-spending-september-2015.csv and filename=test_csv\nroot\n |-- Supplier: string (nullable = true)\n |-- Tot_Amount: double (nullable = true)\n\n"
             }
@@ -47,69 +47,35 @@
             "data": {
               "id": 1462096211616,
               "type": "react",
-              "visible": true,
-              "content": "{\n   \"type\": \"barChart\",\n   \"dataSet\": \"myvar\",\n   \"xVariableName\": \"Supplier\",\n   \"yVariableName\": \"Tot_Amount\",\n   \"width\": 800,\n   \"height\": 300,\n   \"label\": \"Sucammela\",\n   \"margin\": {\"top\": 10, \"bottom\": 50, \"left\": 150, \"right\": 10}\n}",
-              "output": {
-                "key": null,
-                "ref": null,
-                "props": {
-                  "data": [
-                    {
-                      "label": "Sucammela",
-                      "values": [
-                        {
-                          "x": "STUDENT LOANS COMPANY LIMITED",
-                          "y": 1358617829,
-                          "y0": 0
-                        },
-                        {
-                          "x": "POST OFFICE LTD",
-                          "y": 850930266.9301758,
-                          "y0": 0
-                        },
-                        {
-                          "x": "HIGHER EDUCATION FUNDING COUNCIL FOR ENGLAND",
-                          "y": 485789888,
-                          "y0": 0
-                        },
-                        {
-                          "x": "SKILLS FUNDING AGENCY",
-                          "y": 264440000,
-                          "y0": 0
-                        },
-                        {
-                          "x": "ENGINEERING AND PHYSICAL SCIENCES RESEARCH COUNCIL",
-                          "y": 191800000,
-                          "y0": 0
-                        }
-                      ]
-                    }
-                  ],
-                  "width": 800,
-                  "height": 300,
-                  "margin": {
-                    "top": 10,
-                    "bottom": 50,
-                    "left": 150,
-                    "right": 10
-                  },
-                  "xScale": null,
-                  "yScale": null,
-                  "offset": "zero",
-                  "order": "default",
-                  "barPadding": 0.5,
-                  "tooltipMode": "mouse",
-                  "tooltipOffset": {
-                    "top": -35,
-                    "left": 0
-                  },
-                  "tooltipHtml": null,
-                  "tooltipContained": false,
-                  "colorByLabel": true
+              "visible": false,
+              "content": "{\n  \"layout\": {\n    \"float\": \"left\",\n    \"paddingRight\": \"50px\"\n  },\n  \"chart\": {\n   \"type\": \"barChart\",\n   \"dataSet\": \"myvar\",\n   \"xVariableName\": \"Supplier\",\n   \"yVariableName\": \"Tot_Amount\",\n   \"width\": 450,\n   \"height\": 300,\n   \"label\": \"Sucammela\",\n   \"margin\": {\"top\": 10, \"bottom\": 50, \"left\": 120, \"right\": 100}\n  }\n}",
+              "output": [
+                {
+                  "x": "STUDENT LOANS COMPANY LIMITED",
+                  "y": 1358617829,
+                  "y0": 0
                 },
-                "_owner": null,
-                "_store": {}
-              }
+                {
+                  "x": "POST OFFICE LTD",
+                  "y": 850930266.9301758,
+                  "y0": 0
+                },
+                {
+                  "x": "HIGHER EDUCATION FUNDING COUNCIL FOR ENGLAND",
+                  "y": 485789888,
+                  "y0": 0
+                },
+                {
+                  "x": "SKILLS FUNDING AGENCY",
+                  "y": 264440000,
+                  "y0": 0
+                },
+                {
+                  "x": "ENGINEERING AND PHYSICAL SCIENCES RESEARCH COUNCIL",
+                  "y": 191800000,
+                  "y0": 0
+                }
+              ]
             }
           }
         },
@@ -191,14 +157,6 @@
             "entityRanges": []
           },
           {
-            "key": "572c4",
-            "text": "",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": []
-          },
-          {
             "key": "1o87e",
             "text": "",
             "type": "unstyled",
@@ -230,10 +188,81 @@
           },
           {
             "key": "5mme3",
-            "text": "The end.",
+            "text": "I am testing a layout where the chart is on one side while the text goes around.",
             "type": "unstyled",
             "depth": 0,
             "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "ci73b",
+            "text": "So let's write something until we reach the end of the chart:",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "fndno",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "8raq1",
+            "text": "What is Lorem Ipsum?",
+            "type": "header-three",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "1aadk",
+            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.  Where does it come from?",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 0,
+                "length": 11,
+                "style": "BOLD"
+              },
+              {
+                "offset": 530,
+                "length": 9,
+                "style": "BOLD"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "46cf",
+            "text": "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of \"de Finibus Bonorum et Malorum\" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", comes from a line in section 1.10.32.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 0,
+                "length": 763,
+                "style": "CODE"
+              }
+            ],
+            "entityRanges": []
+          },
+          {
+            "key": "ar9d9",
+            "text": "The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from \"de Finibus Bonorum et Malorum\" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [
+              {
+                "offset": 0,
+                "length": 295,
+                "style": "CODE"
+              }
+            ],
             "entityRanges": []
           }
         ]
