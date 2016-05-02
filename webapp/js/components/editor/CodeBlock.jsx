@@ -62,7 +62,7 @@ export default React.createClass({
   },
 
   _onBlur: function() {
-    console.log(`[${this.state.id}] Calling _onBlur`);
+    // console.log(`[${this.state.id}] Calling _onBlur`);
     if (this.state.editMode) {
       var entityKey = this.props.block.getEntityAt(0);
       Entity.mergeData(entityKey, {
@@ -153,7 +153,7 @@ export default React.createClass({
 
   _handleReturn: function(e) {
     if (e.keyCode === 13 /* `Enter` key */ && isCtrlKeyCommand(e)) {
-      console.log("CTRL + ENTER");
+      // console.log("CTRL + ENTER");
       let {id, _, output} = this._getValue();
       let type = Entity
         .get(this.props.block.getEntityAt(0))
@@ -204,7 +204,7 @@ export default React.createClass({
             handleReturn={this._handleReturn}
             keyBindingFn={this._customKeyBindingFn}
             onChange={this._onEditorChange}
-            placeholder="Start a document..."
+            placeholder="Python code block. Start writing..."
             readOnly={!this.state.editMode}
             ref="editor2"
           />

@@ -17,6 +17,17 @@ export default React.createClass({
 
   getInitialState: function() {
     let {id, content, output} = this._getValue();
+    
+    if (content) {
+      var parsedCode = JSON.parse(content);
+      var type = parsedCode['type'];
+      var dataSet = output.props.data[0].values;
+      output = this.renderChart(type, parsedCode, dataSet, true);
+    }
+    else {
+      output = null;
+    }
+
     return {
       id: id,
       editMode: false,
@@ -143,44 +154,56 @@ export default React.createClass({
     
   },
 
+  renderChart: function(type, options, data, stored) {
+    if (type == 'barChart') {
+      var xVariableName = options['xVariableName'];
+      var yVariableName = options['yVariableName'];
+      var width = options['width'];
+      var height = options['height'];
+      var label = options['label'];
+      var margin = options['margin'];
+
+      var chartData;
+      if (!stored) {
+        var values = data.map(function(e) {
+          return {x: e[xVariableName], y: e[yVariableName]};
+        });
+
+        var chartData = [{
+          label: label,
+          values: values
+        }];
+      } else {
+        chartData = [{
+          label: label,
+          values: data
+        }];;
+      }
+      
+      var BarChart = ReactD3.BarChart;
+      var output =
+          <BarChart
+              data={chartData}
+              width={width}
+              height={height}
+              margin={margin}
+          />
+      console.log("output = ");
+      console.log(output);
+      return output;
+    }
+  },
+
   _handleReturn: function(e) {
     if (e.keyCode === 13 /* `Enter` key */ && isCtrlKeyCommand(e)) {
       console.log("CTRL + ENTER");
       var content = this.state.content;
       var parsedCode = JSON.parse(content);
-      var output = undefined;
+      
       var type = parsedCode['type'];
-      if (type == 'barChart') {
-          var variable = parsedCode['dataSet'];
-          var xVariableName = parsedCode['xVariableName'];
-          var yVariableName = parsedCode['yVariableName'];
-          var width = parsedCode['width'];
-          var height = parsedCode['height'];
-          var label = parsedCode['label'];
-          var margin = parsedCode['margin'];
-
-          var dataSet = window[variable];
-          var values = dataSet.map(function(e) {
-              return {x: e[xVariableName], y: e[yVariableName]};
-          });
-
-          var data = [{
-              label: label,
-              values: values
-          }];
-          
-          var BarChart = ReactD3.BarChart;
-          output =
-              <BarChart
-                  data={data}
-                  width={width}
-                  height={height}
-                  margin={margin}
-              />
-          console.log("output = ");
-          console.log(ReactD3);
-          console.log(BarChart);
-      }
+      var variable = parsedCode['dataSet'];
+      var dataSet = window[variable];
+      var output = this.renderChart(type, parsedCode, dataSet, false);
 
       this.setState(
         update(this.state, {
@@ -228,7 +251,7 @@ export default React.createClass({
             handleReturn={this._handleReturn}
             keyBindingFn={this._customKeyBindingFn}
             onChange={this._onEditorChange}
-            placeholder="Start a document..."
+            placeholder="React block. Start writing..."
             readOnly={!this.state.editMode}
             ref="editor2"
           />

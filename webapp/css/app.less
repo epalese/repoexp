@@ -14,18 +14,45 @@ figure {
     margin: 0;
 }
 
+.RichEditor-controls {
+  font-family: 'Helvetica', sans-serif;
+  font-size: 14px;
+  margin-bottom: 5px;
+  user-select: none;
+}
+
+
 .editor-container {
   font-family: 'Century Schoolbook', serif;
   -webkit-font-smoothing: antialiased;
   width: 900px;
   margin: 40px auto;
+  border: 1px solid #ddd;
+  padding: 5px;
 }
 
-.editor-container
-.editor-working-area {
+.editor-container .editor-controls {
+  border-bottom: 1px solid #ddd;
+}
+
+.editor-container .editor-working-area {
   cursor: text;
-  font-size: 18px;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: text;
   min-height: 40px;
+}
+
+.RichEditor-styleButton {
+  color: #999;
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 2px 0;
+  display: inline-block;
+}
+
+.RichEditor-activeButton {
+  color: #5890ff;
 }
 
 .TeXEditor-button {

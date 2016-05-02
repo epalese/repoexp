@@ -12,6 +12,7 @@ import {Map} from 'immutable';
 import Actions from 'appRoot/actions';
 import CodeBlock from 'appRoot/components/editor/CodeBlock';
 import ReactBlock from 'appRoot/components/editor/ReactBlock';
+import {BlockStyleControls, InlineStyleControls} from 'appRoot/components/editor/EditorControls';
 
 const {hasCommandModifier} = KeyBindingUtil;
 
@@ -76,6 +77,7 @@ const removeComponentBlock = (editorState, blockKey) => {
   return EditorState.forceSelection(newState, resetBlock.getSelectionAfter());
 }
 
+
 export default React.createClass({
   mixins: [Reflux.ListenerMixin],
 
@@ -116,15 +118,15 @@ export default React.createClass({
   },
 
   _focus: function() {
-    console.log("MAIN EDItOR FOCUS");
-    console.log(this.state.onBlurCallback);
+    // console.log("MAIN EDITOR FOCUS");
+    // console.log(this.state.onBlurCallback);
 
     if (this.state.onBlurCallback) {
       this.state.onBlurCallback.callback();
       this.setState({onBlurCallback: undefined});
     }
     // this.setState({onBlurCallback: callback});
-    console.log(`Active counter ${this.state.liveComponentEdits.count()}`);
+    // console.log(`Active counter ${this.state.liveComponentEdits.count()}`);
     this.refs.editor.focus()
   },
 
@@ -139,6 +141,32 @@ export default React.createClass({
     );
   },
 
+  _toggleBlockType: function(blockType) {
+    if (blockType == 'code-block') {
+      this._insertCodeComponent();
+    }
+    else if (blockType == 'react-block') {
+      this._insertReactComponent();
+    }
+    else {
+      this._onChange(
+        RichUtils.toggleBlockType(
+          this.state.editorState,
+          blockType
+        )
+      );  
+    }
+  },
+
+  _toggleInlineStyle: function(inlineStyle) {
+    this._onChange(
+      RichUtils.toggleInlineStyle(
+        this.state.editorState,
+        inlineStyle
+      )
+    );
+  },
+
   _blockRenderer: function(block) {
     if (block.getType() === 'atomic') {
       const componentType = Entity.get(block.getEntityAt(0)).getData()['type'];
@@ -148,9 +176,11 @@ export default React.createClass({
           editable: false,
           props: {
             onStartEdit: function(blockKey) {
+              // console.log(`onStarthEdit ${blockKey}`);
               this.setState({liveComponentEdits: this.state.liveComponentEdits.set(blockKey, true)});
             }.bind(this),
             onFinishEdit: function(blockKey) {
+              // console.log(`onFinishEdit ${blockKey}`);
               var {liveComponentEdits} = this.state;
               this.setState({liveComponentEdits: liveComponentEdits.remove(blockKey)});
             }.bind(this),
@@ -158,7 +188,7 @@ export default React.createClass({
               this._removeComponent(blockKey)
             }.bind(this),
             onBlurCallback: function(id, callback) {
-              console.log(`Editor onBlurCallback set from ${id}`);
+              // console.log(`Editor onBlurCallback set from ${id}`);
               var oldBlurCallback = this.state.onBlurCallback;
               if (oldBlurCallback) {
                 // Check if it is a new component that is trying to
@@ -167,12 +197,12 @@ export default React.createClass({
                 let oldId = oldBlurCallback.id;
                 let oldCallback = oldBlurCallback.callback;
                 if (oldId != id) {
-                  console.log(`Editor onBlurCallback: it is the new ${oldId}! calling back`);
+                  // console.log(`Editor onBlurCallback: it is the new ${oldId}! calling back`);
                   oldCallback();
                   this.setState({onBlurCallback: {id: id, callback: callback}});
                 }
                 else {
-                  console.log(`Editor onBlurCallback: it is still ${oldId}! Skipping`);
+                  // console.log(`Editor onBlurCallback: it is still ${oldId}! Skipping`);
                 }
               } else {
                 this.setState({onBlurCallback: {id: id, callback: callback}});
@@ -183,7 +213,7 @@ export default React.createClass({
         };
       }
       else if (componentType === 'react') {
-        console.log("REACT");
+        // console.log("REACT");
         return {
           component: ReactBlock,
           editable: false,
@@ -199,7 +229,7 @@ export default React.createClass({
               this._removeComponent(blockKey)
             }.bind(this),
             onBlurCallback: function(id, callback) {
-              console.log(`Editor onBlurCallback set from ${id}`);
+              // console.log(`Editor onBlurCallback set from ${id}`);
               var oldBlurCallback = this.state.onBlurCallback;
               if (oldBlurCallback) {
                 // Check if it is a new component that is trying to
@@ -208,11 +238,11 @@ export default React.createClass({
                 let oldId = oldBlurCallback.id;
                 let oldCallback = oldBlurCallback.callback;
                 if (oldId != id) {
-                  console.log(`Editor onBlurCallback: it is the new ${oldId}! calling back`);
+                  // console.log(`Editor onBlurCallback: it is the new ${oldId}! calling back`);
                   oldCallback();
                 }
                 else {
-                  console.log(`Editor onBlurCallback: it is still ${oldId}! Skipping`);
+                  // console.log(`Editor onBlurCallback: it is still ${oldId}! Skipping`);
                 }
               }
               this.setState({onBlurCallback: {id: id, callback: callback}});
@@ -280,16 +310,19 @@ export default React.createClass({
   render: function() {
     return (
       <div className="editor-container">
+      
+        <div className="editor-controls">
+          <BlockStyleControls
+            editorState={this.state.editorState}
+            onToggle={this._toggleBlockType}
+          />
+          <InlineStyleControls
+            editorState={this.state.editorState}
+            onToggle={this._toggleInlineStyle}
+          />
+        </div>
+
         <div>{this.state.loading? "Loading" : ""}</div>
-        <button onClick={this._insertCodeComponent} className="Editor-insert">
-          {'Insert new Code component'}
-        </button>
-        <button onClick={this._insertReactComponent} className="Editor-insert">
-          {'Insert new React component'}
-        </button>
-        <button onClick={this._logState} className="Editor-insert">
-          {'Log State'}
-        </button>
         <div className="editor-root">
           <div className="editor-working-area" onClick={this._focus}>
             <Editor
