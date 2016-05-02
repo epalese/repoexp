@@ -196,14 +196,6 @@
           },
           {
             "key": "4dtpu",
-            "text": "",
-            "type": "unstyled",
-            "depth": 0,
-            "inlineStyleRanges": [],
-            "entityRanges": []
-          },
-          {
-            "key": "biq5l",
             "text": "Reporting",
             "type": "header-two",
             "depth": 0,
@@ -385,6 +377,46 @@
                 "style": "BOLD"
               }
             ],
+            "entityRanges": []
+          },
+          {
+            "key": "fje3g",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "a0473",
+            "text": "PS: To save the content of the report press CMD+Enter.",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "7ks66",
+            "text": "",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "738gf",
+            "text": "Cheers,",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
+            "entityRanges": []
+          },
+          {
+            "key": "22tar",
+            "text": "Emanuele",
+            "type": "unstyled",
+            "depth": 0,
+            "inlineStyleRanges": [],
             "entityRanges": []
           },
           {
