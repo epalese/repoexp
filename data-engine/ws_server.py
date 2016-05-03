@@ -1,4 +1,5 @@
 import sys
+import traceback
 import os
 import json
 import Queue
@@ -12,7 +13,6 @@ from autobahn.twisted.websocket import WebSocketServerFactory
 from autobahn.twisted.websocket import WebSocketServerProtocol
 
 from threading import Thread
-from time import sleep
 
 import spark_python.spark_python as sp
 cur_dir = os.path.dirname(os.path.realpath(__file__))
@@ -24,17 +24,6 @@ sc = SparkContext(appName="PySparkShell")
 sqlContext = SQLContext(sc)
 
 peers = []
-
-
-def signal_handler(signal, frame):
-        print('You pressed Ctrl+C!')
-        for peer in peers:
-            peer.queue.put(None)
-        sc.stop()
-        reactor.stop()
-        # sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
-
 
 @contextlib.contextmanager
 def stdoutIO(stdout=None):
@@ -137,6 +126,7 @@ class DataEngineServerProtocol(WebSocketServerProtocol):
         while True:
             request = self.queue.get()
             if request is None:
+                print "[%s] None found in the queue. Terminating..." % (self.peer)
                 return
             response = self.process(request)
             reactor.callFromThread(self.sendMessage, response[0], response[1])
@@ -149,7 +139,12 @@ class DataEngineServerProtocol(WebSocketServerProtocol):
         # sleep_time = randint(1, 5)
 
         with stdoutIO() as s:
-            exec(message["payload"]["content"], self.namespace)
+            try:
+                exec(message["payload"]["content"], self.namespace)
+            except Exception:
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                traceback.print_exception(
+                    exc_type, exc_value, exc_traceback, file=s)
         id = message["payload"]["id"]
         output = json.dumps({
             "id": str(id).encode('utf-8'),
@@ -167,5 +162,21 @@ if __name__ == '__main__':
     factory.protocol = DataEngineServerProtocol
     # factory.setProtocolOptions(maxConnections=2)
 
-    reactor.listenTCP(3001, factory)
+    port = reactor.listenTCP(3001, factory)
+
+    def signal_handler(signal, frame):
+        import time
+        print('[main] You pressed Ctrl+C!')
+        for peer in peers:
+            print("[main] Put none in %s queue" % peer)
+            print("[main] Peer queue %s" % peer.queue)
+            peer.queue.put(None, True)
+        port.loseConnection()
+        time.sleep(1)
+        sc.stop()
+        reactor.stop()
+        print('[main] Everything has been shutdown!')
+        # sys.exit(0)
+    signal.signal(signal.SIGINT, signal_handler)
+
     reactor.run()

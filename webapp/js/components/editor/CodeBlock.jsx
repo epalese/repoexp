@@ -154,10 +154,11 @@ export default React.createClass({
         .get(this.props.block.getEntityAt(0))
         .getData()['type'];
       var msg = {id: id, type: type, content: this.state.content};
-      console.log(msg);
+      // console.log(msg);
       Actions.sendMsgWS(id, msg).then(function() {
           console.log("Message sent and under processing...");
-      });
+          this.setState({output: "<div class='loading'>Loading</div>"});
+      }.bind(this));
       return true;
     }
   },
